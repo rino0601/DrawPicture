@@ -1,0 +1,372 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EA204ECE16247569000E3483 /* PreferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA204ECC16247569000E3483 /* PreferenceViewController.m */; };
+		EA204ECF16247569000E3483 /* PreferenceViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA204ECD16247569000E3483 /* PreferenceViewController_iPhone.xib */; };
+		EA204ED11624759D000E3483 /* PreferenceViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA204ED01624759D000E3483 /* PreferenceViewController_iPad.xib */; };
+		EA6CF3EA16246E4B00E542E8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA6CF3E916246E4B00E542E8 /* UIKit.framework */; };
+		EA6CF3EC16246E4B00E542E8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA6CF3EB16246E4B00E542E8 /* Foundation.framework */; };
+		EA6CF3EE16246E4B00E542E8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA6CF3ED16246E4B00E542E8 /* CoreGraphics.framework */; };
+		EA6CF3F416246E4B00E542E8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EA6CF3F216246E4B00E542E8 /* InfoPlist.strings */; };
+		EA6CF3F616246E4B00E542E8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6CF3F516246E4B00E542E8 /* main.m */; };
+		EA6CF3FA16246E4B00E542E8 /* RINAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6CF3F916246E4B00E542E8 /* RINAppDelegate.m */; };
+		EA6CF3FD16246E4B00E542E8 /* RINViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6CF3FC16246E4B00E542E8 /* RINViewController.m */; };
+		EA6CF40016246E4B00E542E8 /* RINViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA6CF3FE16246E4B00E542E8 /* RINViewController_iPhone.xib */; };
+		EA6CF40316246E4B00E542E8 /* RINViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA6CF40116246E4B00E542E8 /* RINViewController_iPad.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		EA204ECB16247569000E3483 /* PreferenceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferenceViewController.h; sourceTree = "<group>"; };
+		EA204ECC16247569000E3483 /* PreferenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferenceViewController.m; sourceTree = "<group>"; };
+		EA204ECD16247569000E3483 /* PreferenceViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceViewController_iPhone.xib; sourceTree = "<group>"; };
+		EA204ED01624759D000E3483 /* PreferenceViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceViewController_iPad.xib; sourceTree = "<group>"; };
+		EA6CF3E516246E4B00E542E8 /* DrawPicture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrawPicture.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA6CF3E916246E4B00E542E8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		EA6CF3EB16246E4B00E542E8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		EA6CF3ED16246E4B00E542E8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		EA6CF3F116246E4B00E542E8 /* DrawPicture-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DrawPicture-Info.plist"; sourceTree = "<group>"; };
+		EA6CF3F316246E4B00E542E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		EA6CF3F516246E4B00E542E8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		EA6CF3F716246E4B00E542E8 /* DrawPicture-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DrawPicture-Prefix.pch"; sourceTree = "<group>"; };
+		EA6CF3F816246E4B00E542E8 /* RINAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RINAppDelegate.h; sourceTree = "<group>"; };
+		EA6CF3F916246E4B00E542E8 /* RINAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RINAppDelegate.m; sourceTree = "<group>"; };
+		EA6CF3FB16246E4B00E542E8 /* RINViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RINViewController.h; sourceTree = "<group>"; };
+		EA6CF3FC16246E4B00E542E8 /* RINViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RINViewController.m; sourceTree = "<group>"; };
+		EA6CF3FF16246E4B00E542E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RINViewController_iPhone.xib; sourceTree = "<group>"; };
+		EA6CF40216246E4B00E542E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RINViewController_iPad.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EA6CF3E216246E4B00E542E8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA6CF3EA16246E4B00E542E8 /* UIKit.framework in Frameworks */,
+				EA6CF3EC16246E4B00E542E8 /* Foundation.framework in Frameworks */,
+				EA6CF3EE16246E4B00E542E8 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EA204EBC162470A9000E3483 /* RootView */ = {
+			isa = PBXGroup;
+			children = (
+				EA6CF3FB16246E4B00E542E8 /* RINViewController.h */,
+				EA6CF3FC16246E4B00E542E8 /* RINViewController.m */,
+				EA6CF3FE16246E4B00E542E8 /* RINViewController_iPhone.xib */,
+				EA6CF40116246E4B00E542E8 /* RINViewController_iPad.xib */,
+				EA204EBF162470DB000E3483 /* PreferenceView */,
+			);
+			name = RootView;
+			sourceTree = "<group>";
+		};
+		EA204EBE162470C8000E3483 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				EA6CF3F816246E4B00E542E8 /* RINAppDelegate.h */,
+				EA6CF3F916246E4B00E542E8 /* RINAppDelegate.m */,
+			);
+			name = AppDelegate;
+			sourceTree = "<group>";
+		};
+		EA204EBF162470DB000E3483 /* PreferenceView */ = {
+			isa = PBXGroup;
+			children = (
+				EA204ECB16247569000E3483 /* PreferenceViewController.h */,
+				EA204ECC16247569000E3483 /* PreferenceViewController.m */,
+				EA204ECD16247569000E3483 /* PreferenceViewController_iPhone.xib */,
+				EA204ED01624759D000E3483 /* PreferenceViewController_iPad.xib */,
+				EA204ECA16247543000E3483 /* DEBUG */,
+				EA204EC9162474D8000E3483 /* ColorJitter */,
+				EA204EC81624744D000E3483 /* BrushRad&Layer */,
+				EA204EC71624741A000E3483 /* QuickSetting */,
+			);
+			name = PreferenceView;
+			sourceTree = "<group>";
+		};
+		EA204EC71624741A000E3483 /* QuickSetting */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = QuickSetting;
+			sourceTree = "<group>";
+		};
+		EA204EC81624744D000E3483 /* BrushRad&Layer */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "BrushRad&Layer";
+			sourceTree = "<group>";
+		};
+		EA204EC9162474D8000E3483 /* ColorJitter */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = ColorJitter;
+			sourceTree = "<group>";
+		};
+		EA204ECA16247543000E3483 /* DEBUG */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = DEBUG;
+			sourceTree = "<group>";
+		};
+		EA6CF3DA16246E4B00E542E8 = {
+			isa = PBXGroup;
+			children = (
+				EA6CF3EF16246E4B00E542E8 /* DrawPicture */,
+				EA6CF3E816246E4B00E542E8 /* Frameworks */,
+				EA6CF3E616246E4B00E542E8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EA6CF3E616246E4B00E542E8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EA6CF3E516246E4B00E542E8 /* DrawPicture.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EA6CF3E816246E4B00E542E8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EA6CF3E916246E4B00E542E8 /* UIKit.framework */,
+				EA6CF3EB16246E4B00E542E8 /* Foundation.framework */,
+				EA6CF3ED16246E4B00E542E8 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EA6CF3EF16246E4B00E542E8 /* DrawPicture */ = {
+			isa = PBXGroup;
+			children = (
+				EA204EBC162470A9000E3483 /* RootView */,
+				EA204EBE162470C8000E3483 /* AppDelegate */,
+				EA6CF3F016246E4B00E542E8 /* Supporting Files */,
+			);
+			path = DrawPicture;
+			sourceTree = "<group>";
+		};
+		EA6CF3F016246E4B00E542E8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EA6CF3F116246E4B00E542E8 /* DrawPicture-Info.plist */,
+				EA6CF3F216246E4B00E542E8 /* InfoPlist.strings */,
+				EA6CF3F516246E4B00E542E8 /* main.m */,
+				EA6CF3F716246E4B00E542E8 /* DrawPicture-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EA6CF3E416246E4B00E542E8 /* DrawPicture */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EA6CF40616246E4B00E542E8 /* Build configuration list for PBXNativeTarget "DrawPicture" */;
+			buildPhases = (
+				EA6CF3E116246E4B00E542E8 /* Sources */,
+				EA6CF3E216246E4B00E542E8 /* Frameworks */,
+				EA6CF3E316246E4B00E542E8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DrawPicture;
+			productName = DrawPicture;
+			productReference = EA6CF3E516246E4B00E542E8 /* DrawPicture.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EA6CF3DC16246E4B00E542E8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = RIN;
+				LastUpgradeCheck = 0440;
+				ORGANIZATIONNAME = lemonApple;
+			};
+			buildConfigurationList = EA6CF3DF16246E4B00E542E8 /* Build configuration list for PBXProject "DrawPicture" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = EA6CF3DA16246E4B00E542E8;
+			productRefGroup = EA6CF3E616246E4B00E542E8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EA6CF3E416246E4B00E542E8 /* DrawPicture */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EA6CF3E316246E4B00E542E8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA6CF3F416246E4B00E542E8 /* InfoPlist.strings in Resources */,
+				EA6CF40016246E4B00E542E8 /* RINViewController_iPhone.xib in Resources */,
+				EA6CF40316246E4B00E542E8 /* RINViewController_iPad.xib in Resources */,
+				EA204ECF16247569000E3483 /* PreferenceViewController_iPhone.xib in Resources */,
+				EA204ED11624759D000E3483 /* PreferenceViewController_iPad.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EA6CF3E116246E4B00E542E8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA6CF3F616246E4B00E542E8 /* main.m in Sources */,
+				EA6CF3FA16246E4B00E542E8 /* RINAppDelegate.m in Sources */,
+				EA6CF3FD16246E4B00E542E8 /* RINViewController.m in Sources */,
+				EA204ECE16247569000E3483 /* PreferenceViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		EA6CF3F216246E4B00E542E8 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EA6CF3F316246E4B00E542E8 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		EA6CF3FE16246E4B00E542E8 /* RINViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EA6CF3FF16246E4B00E542E8 /* en */,
+			);
+			name = RINViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		EA6CF40116246E4B00E542E8 /* RINViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EA6CF40216246E4B00E542E8 /* en */,
+			);
+			name = RINViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		EA6CF40416246E4B00E542E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EA6CF40516246E4B00E542E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		EA6CF40716246E4B00E542E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DrawPicture/DrawPicture-Prefix.pch";
+				INFOPLIST_FILE = "DrawPicture/DrawPicture-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		EA6CF40816246E4B00E542E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DrawPicture/DrawPicture-Prefix.pch";
+				INFOPLIST_FILE = "DrawPicture/DrawPicture-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EA6CF3DF16246E4B00E542E8 /* Build configuration list for PBXProject "DrawPicture" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA6CF40416246E4B00E542E8 /* Debug */,
+				EA6CF40516246E4B00E542E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EA6CF40616246E4B00E542E8 /* Build configuration list for PBXNativeTarget "DrawPicture" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA6CF40716246E4B00E542E8 /* Debug */,
+				EA6CF40816246E4B00E542E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EA6CF3DC16246E4B00E542E8 /* Project object */;
+}
