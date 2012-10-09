@@ -7,6 +7,7 @@
 //
 
 #import "RINViewController.h"
+#import "PreferenceViewController.h"
 
 @interface RINViewController ()
 
@@ -14,10 +15,27 @@
 
 @implementation RINViewController
 
+- (void)callEditView:(id)sender {
+	
+	PreferenceViewController *viewController;
+	
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+	    viewController = [[PreferenceViewController alloc] initWithNibName:@"PreferenceViewController_iPhone" bundle:nil];
+	} else {
+	    viewController = [[PreferenceViewController alloc] initWithNibName:@"PreferenceViewController_iPad" bundle:nil];
+	}
+	[[self navigationController] pushViewController:viewController animated:YES];
+}
+
+#pragma mark -
+#pragma mark viewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+	[[self navigationItem] setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(callEditView:)]];
+	[[self navigationItem] setTitle:@"DrawPicture"];
 }
 
 - (void)viewDidUnload
