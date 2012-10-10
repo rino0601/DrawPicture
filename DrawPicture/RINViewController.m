@@ -24,6 +24,8 @@
 	} else {
 	    viewController = [[PreferenceViewController alloc] initWithNibName:@"PreferenceViewController_iPad" bundle:nil];
 	}
+	[[self navigationController] setNavigationBarHidden:NO animated:YES];
+	[[self navigationController] setToolbarHidden:YES animated:YES];
 	[[self navigationController] pushViewController:viewController animated:YES];
 }
 
@@ -54,6 +56,21 @@
 	}
 	*/
 	return interfaceOrientation == UIInterfaceOrientationPortrait;
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	if([[self navigationController] isNavigationBarHidden]) {
+		[[self navigationController] setNavigationBarHidden:NO animated:YES];
+		[[self navigationController] setToolbarHidden:NO animated:YES];
+	} else {
+		[[self navigationController] setNavigationBarHidden:YES animated:YES];
+		[[self navigationController] setToolbarHidden:YES animated:YES];
+	}
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[[self navigationController] setNavigationBarHidden:NO animated:YES];
+	[[self navigationController] setToolbarHidden:NO animated:YES];
 }
 
 @end
