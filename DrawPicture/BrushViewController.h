@@ -9,7 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface BrushViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
-	IBOutlet UITableViewCell *CellSrc;
+	IBOutlet UISlider *howMany;
+	IBOutlet UILabel  *howManyL;
+	IBOutlet UITableView *table;
 }
-
+- (IBAction)howManyValueChanged:(UISlider *)sender;
+- (IBAction)howManyTouchEnd:(UISlider *)sender;
 @end

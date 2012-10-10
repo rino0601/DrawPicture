@@ -22,6 +22,9 @@
 		EAC2E0CA1625481F00BA278C /* BrushViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC2E0C81625481F00BA278C /* BrushViewController.m */; };
 		EAC2E0CB1625481F00BA278C /* BrushViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAC2E0C91625481F00BA278C /* BrushViewController_iPhone.xib */; };
 		EAC2E0CD16254E1500BA278C /* BrushViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAC2E0CC16254E1500BA278C /* BrushViewController_iPad.xib */; };
+		EAEC53DE16256DFD00B3BDB9 /* BrushRadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEC53DD16256DFD00B3BDB9 /* BrushRadCell.m */; };
+		EAEC53EC1625833700B3BDB9 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAEC53EB1625833700B3BDB9 /* CoreImage.framework */; };
+		EAEC53EE1625834300B3BDB9 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAEC53ED1625834300B3BDB9 /* MobileCoreServices.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +50,10 @@
 		EAC2E0C81625481F00BA278C /* BrushViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrushViewController.m; sourceTree = "<group>"; };
 		EAC2E0C91625481F00BA278C /* BrushViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrushViewController_iPhone.xib; sourceTree = "<group>"; };
 		EAC2E0CC16254E1500BA278C /* BrushViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrushViewController_iPad.xib; sourceTree = "<group>"; };
+		EAEC53DC16256DFD00B3BDB9 /* BrushRadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrushRadCell.h; sourceTree = "<group>"; };
+		EAEC53DD16256DFD00B3BDB9 /* BrushRadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrushRadCell.m; sourceTree = "<group>"; };
+		EAEC53EB1625833700B3BDB9 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		EAEC53ED1625834300B3BDB9 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +61,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAEC53EE1625834300B3BDB9 /* MobileCoreServices.framework in Frameworks */,
+				EAEC53EC1625833700B3BDB9 /* CoreImage.framework in Frameworks */,
 				EA6CF3EA16246E4B00E542E8 /* UIKit.framework in Frameworks */,
 				EA6CF3EC16246E4B00E542E8 /* Foundation.framework in Frameworks */,
 				EA6CF3EE16246E4B00E542E8 /* CoreGraphics.framework in Frameworks */,
@@ -145,6 +154,8 @@
 		EA6CF3E816246E4B00E542E8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EAEC53ED1625834300B3BDB9 /* MobileCoreServices.framework */,
+				EAEC53EB1625833700B3BDB9 /* CoreImage.framework */,
 				EA6CF3E916246E4B00E542E8 /* UIKit.framework */,
 				EA6CF3EB16246E4B00E542E8 /* Foundation.framework */,
 				EA6CF3ED16246E4B00E542E8 /* CoreGraphics.framework */,
@@ -155,6 +166,7 @@
 		EA6CF3EF16246E4B00E542E8 /* DrawPicture */ = {
 			isa = PBXGroup;
 			children = (
+				EAEC53D916256DBE00B3BDB9 /* CustomUI */,
 				EA204EBC162470A9000E3483 /* RootView */,
 				EA204EBE162470C8000E3483 /* AppDelegate */,
 				EA6CF3F016246E4B00E542E8 /* Supporting Files */,
@@ -185,6 +197,23 @@
 			children = (
 			);
 			name = copyright;
+			sourceTree = "<group>";
+		};
+		EAEC53D916256DBE00B3BDB9 /* CustomUI */ = {
+			isa = PBXGroup;
+			children = (
+				EAEC53DB16256DCD00B3BDB9 /* BrushRadTableCell */,
+			);
+			name = CustomUI;
+			sourceTree = "<group>";
+		};
+		EAEC53DB16256DCD00B3BDB9 /* BrushRadTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				EAEC53DC16256DFD00B3BDB9 /* BrushRadCell.h */,
+				EAEC53DD16256DFD00B3BDB9 /* BrushRadCell.m */,
+			);
+			name = BrushRadTableCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,6 +290,7 @@
 				EA6CF3FD16246E4B00E542E8 /* RINViewController.m in Sources */,
 				EA204ECE16247569000E3483 /* PreferenceViewController.m in Sources */,
 				EAC2E0CA1625481F00BA278C /* BrushViewController.m in Sources */,
+				EAEC53DE16256DFD00B3BDB9 /* BrushRadCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

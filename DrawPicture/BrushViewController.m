@@ -14,6 +14,20 @@
 
 @implementation BrushViewController
 
+- (IBAction)howManyValueChanged:(UISlider *)sender {
+	[howMany setValue:(int)[howMany value]];
+	if((int)[howMany value] < 4)
+		[howMany setValue:4];
+	[howManyL setText:[NSString stringWithFormat:@"%2d",(int)[howMany value]]];
+}
+
+- (IBAction)howManyTouchEnd:(UISlider *)sender {
+	[table beginUpdates];
+	[table deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+	[table insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+	[table endUpdates];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -27,6 +41,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+	[howManyL setText:[NSString stringWithFormat:@"%2d",(int)[howMany value]]];
 }
 
 - (void)viewDidUnload
@@ -49,7 +64,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return 6;
+			return (NSInteger)[howMany value];
 			break;
 		default:
 			return 0;
@@ -60,7 +75,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell;
 	// Configure the cell...
-	/*
+
 	switch(indexPath.section)
 	{
 		case 0:
@@ -69,27 +84,9 @@
 			{
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ColorJitter"];
 			}
-//			cell.textLabel.text = [sect1User objectAtIndex:[indexPath row]];
+			cell.textLabel.text = @"cell here";
 			break;
-		case 1:
-			cell = [tableView dequeueReusableCellWithIdentifier:@"MANUAL"];
-			if(cell == nil)
-			{
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"BrushRad&Layer"];
-			}
-//			cell.textLabel.text = [sect2Manual objectAtIndex:[indexPath row]];
-			break;
-		case 2:
-			cell = [tableView dequeueReusableCellWithIdentifier:@"ABOUT"];
-			if(cell == nil)
-			{
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"BrushRad&Layer"];
-			}
-//			cell.textLabel.text = [sect3About objectAtIndex:[indexPath row]];
-			break;
-	}
-	 */
-	
+	}	
     return cell;
 }
 

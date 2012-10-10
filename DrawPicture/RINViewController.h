@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 
-@interface RINViewController : UIViewController {
+@interface RINViewController : UIViewController <UIImagePickerControllerDelegate,UINavigationControllerDelegate> {
 	IBOutlet UIToolbar *toolbarNib;
+	IBOutlet UIImageView *imageView;
+	bool	newMedia;
 }
 
 @end
