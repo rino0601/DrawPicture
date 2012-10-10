@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface PreferenceViewController : UIViewController<UITableViewDataSource, UITableViewDelegate> {
-
+	NSArray *sect1User;
+	NSArray *sect2Manual;
+	NSArray *sect3About;
 }
 
 @end

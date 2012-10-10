@@ -84,7 +84,6 @@
 				EA204ECC16247569000E3483 /* PreferenceViewController.m */,
 				EA204ECD16247569000E3483 /* PreferenceViewController_iPhone.xib */,
 				EA204ED01624759D000E3483 /* PreferenceViewController_iPad.xib */,
-				EA204ECA16247543000E3483 /* DEBUG */,
 				EA204EC9162474D8000E3483 /* ColorJitter */,
 				EA204EC81624744D000E3483 /* BrushRad&Layer */,
 				EA204EC71624741A000E3483 /* QuickSetting */,
@@ -111,13 +110,6 @@
 			children = (
 			);
 			name = ColorJitter;
-			sourceTree = "<group>";
-		};
-		EA204ECA16247543000E3483 /* DEBUG */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = DEBUG;
 			sourceTree = "<group>";
 		};
 		EA6CF3DA16246E4B00E542E8 = {
