@@ -36,8 +36,13 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+	[toolbarNib setHidden:YES];
 	[[self navigationItem] setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(callEditView:)]];
 	[[self navigationItem] setTitle:@"DrawPicture"];
+	
+	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:0] setTarget:self];
+	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:0] setAction:@selector(callEditView:)];
+	
 	[self setToolbarItems:toolbarNib.items animated:YES];
 }
 
