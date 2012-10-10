@@ -19,6 +19,9 @@
 		EA6CF3FD16246E4B00E542E8 /* RINViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6CF3FC16246E4B00E542E8 /* RINViewController.m */; };
 		EA6CF40016246E4B00E542E8 /* RINViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA6CF3FE16246E4B00E542E8 /* RINViewController_iPhone.xib */; };
 		EA6CF40316246E4B00E542E8 /* RINViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA6CF40116246E4B00E542E8 /* RINViewController_iPad.xib */; };
+		EAC2E0CA1625481F00BA278C /* BrushViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC2E0C81625481F00BA278C /* BrushViewController.m */; };
+		EAC2E0CB1625481F00BA278C /* BrushViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAC2E0C91625481F00BA278C /* BrushViewController_iPhone.xib */; };
+		EAC2E0CD16254E1500BA278C /* BrushViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAC2E0CC16254E1500BA278C /* BrushViewController_iPad.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +43,10 @@
 		EA6CF3FC16246E4B00E542E8 /* RINViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RINViewController.m; sourceTree = "<group>"; };
 		EA6CF3FF16246E4B00E542E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RINViewController_iPhone.xib; sourceTree = "<group>"; };
 		EA6CF40216246E4B00E542E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RINViewController_iPad.xib; sourceTree = "<group>"; };
+		EAC2E0C71625481F00BA278C /* BrushViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrushViewController.h; sourceTree = "<group>"; };
+		EAC2E0C81625481F00BA278C /* BrushViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrushViewController.m; sourceTree = "<group>"; };
+		EAC2E0C91625481F00BA278C /* BrushViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrushViewController_iPhone.xib; sourceTree = "<group>"; };
+		EAC2E0CC16254E1500BA278C /* BrushViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrushViewController_iPad.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,9 +91,11 @@
 				EA204ECC16247569000E3483 /* PreferenceViewController.m */,
 				EA204ECD16247569000E3483 /* PreferenceViewController_iPhone.xib */,
 				EA204ED01624759D000E3483 /* PreferenceViewController_iPad.xib */,
-				EA204EC9162474D8000E3483 /* ColorJitter */,
-				EA204EC81624744D000E3483 /* BrushRad&Layer */,
 				EA204EC71624741A000E3483 /* QuickSetting */,
+				EA204EC9162474D8000E3483 /* ColorJitter */,
+				EA204EC81624744D000E3483 /* Brush */,
+				EAC2E0C6162547C600BA278C /* copyright */,
+				EAC2E0C5162547A600BA278C /* AboutMe */,
 			);
 			name = PreferenceView;
 			sourceTree = "<group>";
@@ -98,11 +107,15 @@
 			name = QuickSetting;
 			sourceTree = "<group>";
 		};
-		EA204EC81624744D000E3483 /* BrushRad&Layer */ = {
+		EA204EC81624744D000E3483 /* Brush */ = {
 			isa = PBXGroup;
 			children = (
+				EAC2E0C71625481F00BA278C /* BrushViewController.h */,
+				EAC2E0C81625481F00BA278C /* BrushViewController.m */,
+				EAC2E0C91625481F00BA278C /* BrushViewController_iPhone.xib */,
+				EAC2E0CC16254E1500BA278C /* BrushViewController_iPad.xib */,
 			);
-			name = "BrushRad&Layer";
+			name = Brush;
 			sourceTree = "<group>";
 		};
 		EA204EC9162474D8000E3483 /* ColorJitter */ = {
@@ -158,6 +171,20 @@
 				EA6CF3F716246E4B00E542E8 /* DrawPicture-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EAC2E0C5162547A600BA278C /* AboutMe */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = AboutMe;
+			sourceTree = "<group>";
+		};
+		EAC2E0C6162547C600BA278C /* copyright */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = copyright;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -217,6 +244,8 @@
 				EA6CF40316246E4B00E542E8 /* RINViewController_iPad.xib in Resources */,
 				EA204ECF16247569000E3483 /* PreferenceViewController_iPhone.xib in Resources */,
 				EA204ED11624759D000E3483 /* PreferenceViewController_iPad.xib in Resources */,
+				EAC2E0CB1625481F00BA278C /* BrushViewController_iPhone.xib in Resources */,
+				EAC2E0CD16254E1500BA278C /* BrushViewController_iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,6 +260,7 @@
 				EA6CF3FA16246E4B00E542E8 /* RINAppDelegate.m in Sources */,
 				EA6CF3FD16246E4B00E542E8 /* RINViewController.m in Sources */,
 				EA204ECE16247569000E3483 /* PreferenceViewController.m in Sources */,
+				EAC2E0CA1625481F00BA278C /* BrushViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

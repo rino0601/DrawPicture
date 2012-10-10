@@ -16,9 +16,7 @@
 @implementation RINViewController
 
 - (void)callEditView:(id)sender {
-	
 	PreferenceViewController *viewController;
-	
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 	    viewController = [[PreferenceViewController alloc] initWithNibName:@"PreferenceViewController_iPhone" bundle:nil];
 	} else {
