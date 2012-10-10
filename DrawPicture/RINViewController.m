@@ -38,6 +38,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
 	[[self navigationItem] setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(callEditView:)]];
 	[[self navigationItem] setTitle:@"DrawPicture"];
+	[self setToolbarItems:toolbarNib.items animated:YES];
 }
 
 - (void)viewDidUnload

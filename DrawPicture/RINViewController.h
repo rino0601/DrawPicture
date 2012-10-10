@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RINViewController : UIViewController
+@interface RINViewController : UIViewController {
+	IBOutlet UIToolbar *toolbarNib;
+}
 
 @end
