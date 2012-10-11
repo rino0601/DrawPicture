@@ -19,6 +19,9 @@
 		EA6CF3FD16246E4B00E542E8 /* RINViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6CF3FC16246E4B00E542E8 /* RINViewController.m */; };
 		EA6CF40016246E4B00E542E8 /* RINViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA6CF3FE16246E4B00E542E8 /* RINViewController_iPhone.xib */; };
 		EA6CF40316246E4B00E542E8 /* RINViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA6CF40116246E4B00E542E8 /* RINViewController_iPad.xib */; };
+		EAB2A46E162671CA0092198A /* AboutMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2A46C162671CA0092198A /* AboutMeViewController.m */; };
+		EAB2A46F162671CA0092198A /* AboutMeViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAB2A46D162671CA0092198A /* AboutMeViewController_iPhone.xib */; };
+		EAB2A472162671EC0092198A /* AboutMeViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAB2A471162671EC0092198A /* AboutMeViewController_iPad.xib */; };
 		EAC2E0CA1625481F00BA278C /* BrushViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC2E0C81625481F00BA278C /* BrushViewController.m */; };
 		EAC2E0CB1625481F00BA278C /* BrushViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAC2E0C91625481F00BA278C /* BrushViewController_iPhone.xib */; };
 		EAC2E0CD16254E1500BA278C /* BrushViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAC2E0CC16254E1500BA278C /* BrushViewController_iPad.xib */; };
@@ -46,6 +49,10 @@
 		EA6CF3FC16246E4B00E542E8 /* RINViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RINViewController.m; sourceTree = "<group>"; };
 		EA6CF3FF16246E4B00E542E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RINViewController_iPhone.xib; sourceTree = "<group>"; };
 		EA6CF40216246E4B00E542E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RINViewController_iPad.xib; sourceTree = "<group>"; };
+		EAB2A46B162671CA0092198A /* AboutMeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutMeViewController.h; sourceTree = "<group>"; };
+		EAB2A46C162671CA0092198A /* AboutMeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutMeViewController.m; sourceTree = "<group>"; };
+		EAB2A46D162671CA0092198A /* AboutMeViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutMeViewController_iPhone.xib; sourceTree = "<group>"; };
+		EAB2A471162671EC0092198A /* AboutMeViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutMeViewController_iPad.xib; sourceTree = "<group>"; };
 		EAC2E0C71625481F00BA278C /* BrushViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrushViewController.h; sourceTree = "<group>"; };
 		EAC2E0C81625481F00BA278C /* BrushViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrushViewController.m; sourceTree = "<group>"; };
 		EAC2E0C91625481F00BA278C /* BrushViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrushViewController_iPhone.xib; sourceTree = "<group>"; };
@@ -188,6 +195,10 @@
 		EAC2E0C5162547A600BA278C /* AboutMe */ = {
 			isa = PBXGroup;
 			children = (
+				EAB2A46B162671CA0092198A /* AboutMeViewController.h */,
+				EAB2A46C162671CA0092198A /* AboutMeViewController.m */,
+				EAB2A46D162671CA0092198A /* AboutMeViewController_iPhone.xib */,
+				EAB2A471162671EC0092198A /* AboutMeViewController_iPad.xib */,
 			);
 			name = AboutMe;
 			sourceTree = "<group>";
@@ -275,6 +286,8 @@
 				EA204ED11624759D000E3483 /* PreferenceViewController_iPad.xib in Resources */,
 				EAC2E0CB1625481F00BA278C /* BrushViewController_iPhone.xib in Resources */,
 				EAC2E0CD16254E1500BA278C /* BrushViewController_iPad.xib in Resources */,
+				EAB2A46F162671CA0092198A /* AboutMeViewController_iPhone.xib in Resources */,
+				EAB2A472162671EC0092198A /* AboutMeViewController_iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +304,7 @@
 				EA204ECE16247569000E3483 /* PreferenceViewController.m in Sources */,
 				EAC2E0CA1625481F00BA278C /* BrushViewController.m in Sources */,
 				EAEC53DE16256DFD00B3BDB9 /* BrushRadCell.m in Sources */,
+				EAB2A46E162671CA0092198A /* AboutMeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

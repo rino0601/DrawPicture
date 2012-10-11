@@ -9,6 +9,7 @@
 #import "PreferenceViewController.h"
 
 #import "BrushViewController.h"
+#import "AboutMeViewController.h"
 
 @implementation PreferenceViewController
 
@@ -144,6 +145,17 @@
 		}
 		[[self navigationController] pushViewController:viewController animated:YES];
 
+		return ;
+	}
+	else if (indexPath.section==2 && indexPath.row == 1) {
+		AboutMeViewController *viewController;
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+			viewController = [[AboutMeViewController alloc] initWithNibName:@"AboutMeViewController_iPhone" bundle:nil];
+		} else {
+			viewController = [[AboutMeViewController alloc] initWithNibName:@"AboutMeViewController_iPad" bundle:nil];
+		}
+		[[self navigationController] pushViewController:viewController animated:YES];
+		
 		return ;
 	}
 	[[self navigationController] popViewControllerAnimated:YES];
