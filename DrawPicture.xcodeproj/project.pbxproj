@@ -29,6 +29,7 @@
 		EAC2E0CA1625481F00BA278C /* BrushViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC2E0C81625481F00BA278C /* BrushViewController.m */; };
 		EAC2E0CB1625481F00BA278C /* BrushViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAC2E0C91625481F00BA278C /* BrushViewController_iPhone.xib */; };
 		EAC2E0CD16254E1500BA278C /* BrushViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAC2E0CC16254E1500BA278C /* BrushViewController_iPad.xib */; };
+		EAE2EBD61627F94900D984C9 /* BrushRadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAE2EBD51627F94900D984C9 /* BrushRadCell.xib */; };
 		EAEC53DE16256DFD00B3BDB9 /* BrushRadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EAEC53DD16256DFD00B3BDB9 /* BrushRadCell.m */; };
 		EAEC53EC1625833700B3BDB9 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAEC53EB1625833700B3BDB9 /* CoreImage.framework */; };
 		EAEC53EE1625834300B3BDB9 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAEC53ED1625834300B3BDB9 /* MobileCoreServices.framework */; };
@@ -65,6 +66,7 @@
 		EAC2E0C81625481F00BA278C /* BrushViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrushViewController.m; sourceTree = "<group>"; };
 		EAC2E0C91625481F00BA278C /* BrushViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrushViewController_iPhone.xib; sourceTree = "<group>"; };
 		EAC2E0CC16254E1500BA278C /* BrushViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrushViewController_iPad.xib; sourceTree = "<group>"; };
+		EAE2EBD51627F94900D984C9 /* BrushRadCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrushRadCell.xib; sourceTree = "<group>"; };
 		EAEC53DC16256DFD00B3BDB9 /* BrushRadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrushRadCell.h; sourceTree = "<group>"; };
 		EAEC53DD16256DFD00B3BDB9 /* BrushRadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrushRadCell.m; sourceTree = "<group>"; };
 		EAEC53EB1625833700B3BDB9 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
@@ -251,6 +253,7 @@
 			children = (
 				EAEC53DC16256DFD00B3BDB9 /* BrushRadCell.h */,
 				EAEC53DD16256DFD00B3BDB9 /* BrushRadCell.m */,
+				EAE2EBD51627F94900D984C9 /* BrushRadCell.xib */,
 			);
 			name = BrushRadTableCell;
 			sourceTree = "<group>";
@@ -320,6 +323,7 @@
 				EA59FB5C1627E8F4000DCBCA /* icon57.png in Resources */,
 				EA59FB5E1627E8FA000DCBCA /* icon114.png in Resources */,
 				EA59FB601627E8FE000DCBCA /* icon144.png in Resources */,
+				EAE2EBD61627F94900D984C9 /* BrushRadCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

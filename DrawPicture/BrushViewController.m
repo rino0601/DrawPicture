@@ -7,6 +7,7 @@
 //
 
 #import "BrushViewController.h"
+#import "BrushRadCell.h"
 
 @interface BrushViewController ()
 
@@ -22,6 +23,14 @@
 }
 
 - (IBAction)howManyTouchEnd:(UISlider *)sender {
+	
+	[brushes removeAllObjects];
+	int k = (100/(int)[howMany value]);
+	int n = [howMany value];
+	for (int i=0 ; i<(int)[howMany value]; i++) {
+		[brushes addObject:[DataBrush dataBrushWithName:[NSString stringWithFormat:@"order%2d",i+1] Value:k*(2*n-2*i-1)/2 lowerBound:k*(n-1-i) upperBound:k*(n-i)]];
+	}
+	
 	[table beginUpdates];
 	[table deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 	[table insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
@@ -42,6 +51,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
 	[howManyL setText:[NSString stringWithFormat:@"%2d",(int)[howMany value]]];
+	brushes = [[NSMutableArray alloc] init];
+	int k = (100/(int)[howMany value]);
+	int n = [howMany value];
+	for (int i=0 ; i<(int)[howMany value]; i++) {
+		[brushes addObject:[DataBrush dataBrushWithName:[NSString stringWithFormat:@"order%2d",i+1] Value:k*(2*n-2*i-1)/2 lowerBound:k*(n-1-i) upperBound:k*(n-i)]];
+	}
 }
 
 - (void)viewDidUnload
@@ -73,20 +88,22 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	UITableViewCell *cell;
+	BrushRadCell *cell = [[BrushRadCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"indiBRUSH"];
 	// Configure the cell...
 
 	switch(indexPath.section)
 	{
 		case 0:
-			cell = [tableView dequeueReusableCellWithIdentifier:@"USER"];
+			cell = (BrushRadCell *)[tableView dequeueReusableCellWithIdentifier:@"BRUSH"];
 			if(cell == nil)
-			{
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ColorJitter"];
+			{ 
+				NSArray *style = [[NSBundle mainBundle] loadNibNamed:@"BrushRadCell" owner:nil options:nil];
+				cell = [style objectAtIndex:0];
 			}
-			cell.textLabel.text = @"cell here";
+			// individual init;
+			[cell setDataBrush:[brushes objectAtIndex:[indexPath row]]];
 			break;
-	}	
+	}
     return cell;
 }
 

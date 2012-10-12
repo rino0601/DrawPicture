@@ -12,6 +12,7 @@
 	IBOutlet UISlider *howMany;
 	IBOutlet UILabel  *howManyL;
 	IBOutlet UITableView *table;
+	NSMutableArray *brushes;
 }
 - (IBAction)howManyValueChanged:(UISlider *)sender;
 - (IBAction)howManyTouchEnd:(UISlider *)sender;
