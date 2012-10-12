@@ -9,10 +9,13 @@
 #import <UIKit/UIKit.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
+@class RINhertzmann;
+
 @interface RINViewController : UIViewController <UIImagePickerControllerDelegate,UINavigationControllerDelegate> {
 	IBOutlet UIToolbar *toolbarNib;
 	IBOutlet UIImageView *imageView;
 	bool	newMedia;
+	RINhertzmann *iCanvas;
 }
 
 @end

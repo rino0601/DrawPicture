@@ -8,6 +8,7 @@
 
 #import "RINViewController.h"
 #import "PreferenceViewController.h"
+#import "RINhertzmann.h"
 
 @interface RINViewController ()
 
@@ -102,6 +103,25 @@
 	UIImageWriteToSavedPhotosAlbum([imageView image],self,@selector(image:finishedSavingWithError:contextInfo:),nil);
 }
 
+- (void)drawActionMainAlgorithm {
+	if ([imageView image]==nil) {
+		UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle: @"사진이 필요합니다."
+                              message: @"좌측하단의 카메라나 포토앨범 버튼을 눌러 사진을 불러주세요."\
+                              delegate: nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        [alert show];
+		return ;
+	}
+	if(iCanvas!=nil){
+		[iCanvas removeFromSuperview];	
+	}
+	iCanvas = [[RINhertzmann alloc] initWithFrame:[[UIScreen mainScreen] bounds] Image:[imageView image]];
+	[[self view] addSubview:iCanvas];
+	[imageView setHidden:YES];
+}
+
 #pragma mark -
 #pragma mark viewController
 
@@ -125,6 +145,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
 	[toolbarNib setHidden:YES];
 	[[self navigationItem] setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(callEditView:)]];
+	[[self navigationItem] setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"draw" style:UIBarButtonItemStyleBordered target:self action:@selector(drawActionMainAlgorithm)]];
 	[[self navigationItem] setTitle:@"DrawPicture"];
 	
 	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:0] setTarget:self];
