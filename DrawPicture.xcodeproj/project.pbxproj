@@ -10,6 +10,10 @@
 		EA204ECE16247569000E3483 /* PreferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA204ECC16247569000E3483 /* PreferenceViewController.m */; };
 		EA204ECF16247569000E3483 /* PreferenceViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA204ECD16247569000E3483 /* PreferenceViewController_iPhone.xib */; };
 		EA204ED11624759D000E3483 /* PreferenceViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA204ED01624759D000E3483 /* PreferenceViewController_iPad.xib */; };
+		EA59FB5A1627E890000DCBCA /* icon72.png in Resources */ = {isa = PBXBuildFile; fileRef = EA59FB591627E890000DCBCA /* icon72.png */; };
+		EA59FB5C1627E8F4000DCBCA /* icon57.png in Resources */ = {isa = PBXBuildFile; fileRef = EA59FB5B1627E8F4000DCBCA /* icon57.png */; };
+		EA59FB5E1627E8FA000DCBCA /* icon114.png in Resources */ = {isa = PBXBuildFile; fileRef = EA59FB5D1627E8FA000DCBCA /* icon114.png */; };
+		EA59FB601627E8FE000DCBCA /* icon144.png in Resources */ = {isa = PBXBuildFile; fileRef = EA59FB5F1627E8FE000DCBCA /* icon144.png */; };
 		EA6CF3EA16246E4B00E542E8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA6CF3E916246E4B00E542E8 /* UIKit.framework */; };
 		EA6CF3EC16246E4B00E542E8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA6CF3EB16246E4B00E542E8 /* Foundation.framework */; };
 		EA6CF3EE16246E4B00E542E8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA6CF3ED16246E4B00E542E8 /* CoreGraphics.framework */; };
@@ -35,6 +39,10 @@
 		EA204ECC16247569000E3483 /* PreferenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferenceViewController.m; sourceTree = "<group>"; };
 		EA204ECD16247569000E3483 /* PreferenceViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceViewController_iPhone.xib; sourceTree = "<group>"; };
 		EA204ED01624759D000E3483 /* PreferenceViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceViewController_iPad.xib; sourceTree = "<group>"; };
+		EA59FB591627E890000DCBCA /* icon72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon72.png; path = ../icon72.png; sourceTree = "<group>"; };
+		EA59FB5B1627E8F4000DCBCA /* icon57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon57.png; path = ../icon57.png; sourceTree = "<group>"; };
+		EA59FB5D1627E8FA000DCBCA /* icon114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon114.png; path = ../icon114.png; sourceTree = "<group>"; };
+		EA59FB5F1627E8FE000DCBCA /* icon144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon144.png; path = ../icon144.png; sourceTree = "<group>"; };
 		EA6CF3E516246E4B00E542E8 /* DrawPicture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrawPicture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA6CF3E916246E4B00E542E8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		EA6CF3EB16246E4B00E542E8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -141,6 +149,25 @@
 			name = ColorJitter;
 			sourceTree = "<group>";
 		};
+		EA59FB561627E818000DCBCA /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				EA59FB581627E820000DCBCA /* image */,
+			);
+			name = Resource;
+			sourceTree = "<group>";
+		};
+		EA59FB581627E820000DCBCA /* image */ = {
+			isa = PBXGroup;
+			children = (
+				EA59FB5F1627E8FE000DCBCA /* icon144.png */,
+				EA59FB5D1627E8FA000DCBCA /* icon114.png */,
+				EA59FB5B1627E8F4000DCBCA /* icon57.png */,
+				EA59FB591627E890000DCBCA /* icon72.png */,
+			);
+			name = image;
+			sourceTree = "<group>";
+		};
 		EA6CF3DA16246E4B00E542E8 = {
 			isa = PBXGroup;
 			children = (
@@ -173,6 +200,7 @@
 		EA6CF3EF16246E4B00E542E8 /* DrawPicture */ = {
 			isa = PBXGroup;
 			children = (
+				EA59FB561627E818000DCBCA /* Resource */,
 				EAEC53D916256DBE00B3BDB9 /* CustomUI */,
 				EA204EBC162470A9000E3483 /* RootView */,
 				EA204EBE162470C8000E3483 /* AppDelegate */,
@@ -288,6 +316,10 @@
 				EAC2E0CD16254E1500BA278C /* BrushViewController_iPad.xib in Resources */,
 				EAB2A46F162671CA0092198A /* AboutMeViewController_iPhone.xib in Resources */,
 				EAB2A472162671EC0092198A /* AboutMeViewController_iPad.xib in Resources */,
+				EA59FB5A1627E890000DCBCA /* icon72.png in Resources */,
+				EA59FB5C1627E8F4000DCBCA /* icon57.png in Resources */,
+				EA59FB5E1627E8FA000DCBCA /* icon114.png in Resources */,
+				EA59FB601627E8FE000DCBCA /* icon144.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

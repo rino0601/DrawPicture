@@ -59,6 +59,34 @@
     }
 }
 
+- (void)rotateImageRight {
+	if([imageView image]) {
+		[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationRight]];
+	} else {
+		UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle: @"사진이 필요합니다."
+                              message: @"좌측하단의 카메라나 포토앨범 버튼을 눌러 사진을 불러주세요."\
+                              delegate: nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        [alert show];
+	}
+}
+
+- (void)rotateImageLeft {
+	if([imageView image]) {
+		[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationLeft]];
+	} else {
+		UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle: @"사진이 필요합니다."
+                              message: @"좌측하단의 카메라나 포토앨범 버튼을 눌러 사진을 불러주세요."\
+                              delegate: nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        [alert show];
+	}
+}
+
 - (void)refreshImageView {
 	[imageView setImage:nil];
 }
@@ -105,11 +133,21 @@
 	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:1] setTarget:self];
 	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:1] setAction:@selector(useCameraRoll)];
 	
+	// objectAtIndex:2 is flexible space bar item;
+	
 	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:3] setTarget:self];
-	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:3] setAction:@selector(refreshImageView)];
+	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:3] setAction:@selector(rotateImageRight)];
 	
 	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:4] setTarget:self];
-	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:4] setAction:@selector(saveCurrentImageView)];
+	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:4] setAction:@selector(rotateImageLeft)];
+	
+	// objectAtIndex:5 is flexible space bar item;
+	
+	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:6] setTarget:self];
+	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:6] setAction:@selector(refreshImageView)];
+	
+	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:7] setTarget:self];
+	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:7] setAction:@selector(saveCurrentImageView)];
 	
 	
 	[self setToolbarItems:toolbarNib.items animated:YES];
@@ -148,7 +186,7 @@
     [self dismissModalViewControllerAnimated:YES];
     if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-		[imageView setImage:image];
+		[imageView setImage:image];		
         if (newMedia) {
             UIImageWriteToSavedPhotosAlbum(image,self,@selector(image:finishedSavingWithError:contextInfo:),nil);
 		}
