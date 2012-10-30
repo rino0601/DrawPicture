@@ -8,14 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DataBrush : NSObject 
+@class BrushRadCell;
+
+@interface DataBrush : NSObject {
+	BrushRadCell * target;
+}
 
 @property (retain, nonatomic) NSString *name;
 @property (nonatomic) NSInteger value;
-@property (nonatomic) NSInteger lowerBound;
-@property (nonatomic) NSInteger upperBound;
 
-+ (id)dataBrushWithName:(NSString *)name Value:(NSInteger)value lowerBound:(NSInteger)lb upperBound:(NSInteger)ub;
++ (id)dataBrushWithName:(NSString *)name Value:(NSInteger)value;
+- (void)makeLink:(BrushRadCell *)sender;
+- (NSInteger)getCurrentValue;
 @end
 
 @interface BrushRadCell : UITableViewCell {
@@ -29,4 +33,5 @@
 
 - (IBAction)ctrlValueChanged:(UISlider *)sender;
 - (void)setDataBrush:(DataBrush *)data;
+- (NSInteger)getCurrentValue;
 @end

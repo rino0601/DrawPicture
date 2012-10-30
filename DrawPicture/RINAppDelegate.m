@@ -41,7 +41,7 @@
 		if(error)
 			NSLog(@"%@",error);
 	}
-	sqlite3_open_v2([[docuPath stringByAppendingPathComponent:@"userSetting.sqlite"] UTF8String], &dbo, SQLITE_OPEN_READONLY, NULL);
+	sqlite3_open_v2([[docuPath stringByAppendingPathComponent:@"userSetting.sqlite"] UTF8String], &dbo, SQLITE_OPEN_READWRITE, NULL);
 	
 	
     return YES;

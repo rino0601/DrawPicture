@@ -22,7 +22,7 @@
 	sqlite3_prepare_v2(dbo, [@"SELECT radix  FROM BRUSH ORDER BY radix DESC" UTF8String], -1, &localizer, NULL);
 	while (sqlite3_step(localizer)==SQLITE_ROW) {
 		int kval=sqlite3_column_int(localizer, 0);
-		[brushes addObject:[DataBrush dataBrushWithName:[NSString stringWithFormat:@"order%2d",i+1] Value:kval lowerBound:0 upperBound:100]];
+		[brushes addObject:[DataBrush dataBrushWithName:[NSString stringWithFormat:@"order%2d",i+1] Value:kval]];
 		i++;
 	}
 	[howMany setValue:i];
@@ -32,9 +32,17 @@
 - (void)SavetoDatabase:(id)sender {
 	RINAppDelegate* delegate=(RINAppDelegate *)[[UIApplication sharedApplication] delegate];
 	sqlite3 *dbo = [delegate dbo];
-	sqlite3_stmt *localizer=NULL;
 	
-
+	char *error;
+	sqlite3_exec(dbo, [@"DELETE FROM BRUSH" UTF8String], NULL, NULL, &error);
+	if(error)
+		NSLog(@"%s",error);
+	
+	for(DataBrush *cell in brushes ) {
+		NSString * query = [NSString stringWithFormat:@"INSERT INTO BRUSH (radix) VALUES ('%d')",[cell getCurrentValue]];
+		char *error;
+		sqlite3_exec(dbo, [query UTF8String], NULL, NULL, &error);
+	}
 	
 	[[self navigationController] popViewControllerAnimated:YES];
 }
@@ -52,13 +60,15 @@
 	int k = (100/(int)[howMany value]);
 	int n = [howMany value];
 	for (int i=0 ; i<(int)[howMany value]; i++) {
-		[brushes addObject:[DataBrush dataBrushWithName:[NSString stringWithFormat:@"order%2d",i+1] Value:k*(2*n-2*i-1)/2 lowerBound:k*(n-1-i) upperBound:k*(n-i)]];
+		[brushes addObject:[DataBrush dataBrushWithName:[NSString stringWithFormat:@"order%2d",i+1] Value:k*(2*n-2*i-1)/2]];
 	}
+	
 	
 	[table beginUpdates];
 	[table deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 	[table insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 	[table endUpdates];
+	[table reloadData];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -143,7 +153,7 @@
 
 #pragma mark TableDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[[self navigationController] popViewControllerAnimated:YES];
+//	[[self navigationController] popViewControllerAnimated:YES];
 }
 
 #pragma mark -

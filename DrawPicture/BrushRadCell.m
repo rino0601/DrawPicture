@@ -9,16 +9,21 @@
 #import "BrushRadCell.h"
 
 @implementation DataBrush
-@synthesize name,value,upperBound,lowerBound;
-+ (id)dataBrushWithName:(NSString *)name Value:(NSInteger)value lowerBound:(NSInteger)lb upperBound:(NSInteger)ub {
+@synthesize name,value;
++ (id)dataBrushWithName:(NSString *)name Value:(NSInteger)value {
 	DataBrush *DBrsh = [[DataBrush alloc] init];
 	[DBrsh setName:name];
 	[DBrsh setValue:value];
-	[DBrsh setLowerBound:lb];
-	[DBrsh setUpperBound:ub];
 	return DBrsh;
 }
-
+- (void)makeLink:(BrushRadCell *)sender {
+	target=sender;
+}
+- (NSInteger)getCurrentValue {
+	if(!target)
+		NSLog(@"BrushRadCell doesn't exist");
+	return [target getCurrentValue];
+}
 @end
 
 
@@ -58,8 +63,12 @@
 	[cellName setText:[data name]];
 	[cellCtrl setValue:[data value]];
 	[cellValue setText:[NSString stringWithFormat:@"%2d",[data value]]];
-	lowerBound = [data lowerBound];
-	upperBound = [data upperBound];
+	lowerBound = 0;
+	upperBound = 99;
+	[data makeLink:self];
+}
+- (NSInteger)getCurrentValue{
+	return (NSInteger)[cellCtrl value];
 }
 
 @end

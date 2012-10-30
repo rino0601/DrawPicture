@@ -9,10 +9,8 @@
 #import "RINViewController.h"
 #import "PreferenceViewController.h"
 #import "RINhertzmann.h"
+#import "RINAppDelegate.h"
 
-@interface RINViewController ()
-
-@end
 
 @implementation RINViewController
 
@@ -170,16 +168,30 @@
 	[imageView setHidden:YES]; // create canvas
 	
 	// paint the canvas
-								//	for each brush radius Ri,
-								//		from largest to smallest do
-								//		{
-								//			// apply Gaussian blur
-								//			referenceImage=sourceImage*G(fσ Ri)
-								//			// paint a layer
-								//			paintLayer(canvas, referenceImage, Ri)
-								//
-								//		}
-								//	return canvas
+	NSMutableArray *Radixes = [[NSMutableArray alloc] init];
+	RINAppDelegate* delegate=(RINAppDelegate *)[[UIApplication sharedApplication] delegate];
+	sqlite3 *dbo = [delegate dbo];
+	sqlite3_stmt *localizer=NULL;
+	sqlite3_prepare_v2(dbo, [@"SELECT radix  FROM BRUSH ORDER BY radix DESC" UTF8String], -1, &localizer, NULL);
+	while (sqlite3_step(localizer)==SQLITE_ROW) {
+		int kval=sqlite3_column_int(localizer, 0);
+		[Radixes addObject:[NSNumber numberWithInt:kval]];
+	}
+	sqlite3_finalize(localizer);//Radixes initializing done.
+	
+	// canvas인 iCanvas에게 Radixes를 전달하고 끝내야 할지도 모름.
+	//이하 과정은 그 안에서.
+	
+	for(NSNumber *num in Radixes){//	for each brush radius Ri, from largest to smallest do
+		//		{
+		//			// apply Gaussian blur
+		//			referenceImage=sourceImage*G(fσ Ri)
+		//			// paint a layer
+		//			paintLayer(canvas, referenceImage, Ri)
+		//
+		//		}
+		//	return canvas
+	}
 }
 
 #pragma mark -
