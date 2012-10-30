@@ -62,7 +62,25 @@
 
 - (void)rotateImageRight {
 	if([imageView image]) {
-		[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationRight]];
+		switch ([[imageView image] imageOrientation]) {
+			case UIImageOrientationDown:
+			case UIImageOrientationDownMirrored:
+				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationLeft]];
+				break;
+			case UIImageOrientationLeft:
+			case UIImageOrientationLeftMirrored:
+				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationUp]];
+				
+				break;
+			case UIImageOrientationRight:
+			case UIImageOrientationRightMirrored:
+				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationDown]];
+				break;
+			case UIImageOrientationUp:
+			case UIImageOrientationUpMirrored:
+				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationRight]];
+				break;
+		}
 	} else {
 		UIAlertView *alert = [[UIAlertView alloc]
                               initWithTitle: @"사진이 필요합니다."
@@ -76,7 +94,24 @@
 
 - (void)rotateImageLeft {
 	if([imageView image]) {
-		[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationLeft]];
+		switch ([[imageView image] imageOrientation]) {
+			case UIImageOrientationDown:
+			case UIImageOrientationDownMirrored:
+				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationRight]];
+				break;
+			case UIImageOrientationLeft:
+			case UIImageOrientationLeftMirrored:
+				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationDown]];
+				break;
+			case UIImageOrientationRight:
+			case UIImageOrientationRightMirrored:
+				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationUp]];
+				break;
+			case UIImageOrientationUp:
+			case UIImageOrientationUpMirrored:
+				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationLeft]];
+				break;
+		}
 	} else {
 		UIAlertView *alert = [[UIAlertView alloc]
                               initWithTitle: @"사진이 필요합니다."
@@ -90,20 +125,33 @@
 
 - (void)refreshImageView {
 	[imageView setImage:nil];
+	[imageView setHidden:NO];
+	[iCanvas removeFromSuperview];
+	iCanvas=nil;
 }
 
 - (void)saveCurrentImageView {
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle: @"사진을 저장 했습니다."
-						  message: @"카메라 롤에 현재 이미지가 저장되었습니다."\
-						  delegate: nil
-						  cancelButtonTitle:@"OK"
-						  otherButtonTitles:nil];
-	[alert show];
-	UIImageWriteToSavedPhotosAlbum([imageView image],self,@selector(image:finishedSavingWithError:contextInfo:),nil);
+	if([iCanvas image]){
+		UIAlertView *alert = [[UIAlertView alloc]
+							  initWithTitle: @"사진을 저장 했습니다."
+							  message: @"카메라 롤에 현재 이미지가 저장되었습니다."\
+							  delegate: nil
+							  cancelButtonTitle:@"OK"
+							  otherButtonTitles:nil];
+		[alert show];
+		UIImageWriteToSavedPhotosAlbum([iCanvas image],self,@selector(image:finishedSavingWithError:contextInfo:),nil);
+	} else {
+		UIAlertView *alert = [[UIAlertView alloc]
+							  initWithTitle: @"먼저 draw 해야 합니다."
+							  message: @"좌측상단의 draw를 눌러주세요."\
+							  delegate: nil
+							  cancelButtonTitle:@"OK"
+							  otherButtonTitles:nil];
+		[alert show];
+	}
 }
 
-- (void)drawActionMainAlgorithm {
+- (void)drawActionMainAlgorithm { //  paint
 	if ([imageView image]==nil) {
 		UIAlertView *alert = [[UIAlertView alloc]
                               initWithTitle: @"사진이 필요합니다."
@@ -119,7 +167,19 @@
 	}
 	iCanvas = [[RINhertzmann alloc] initWithFrame:[[UIScreen mainScreen] bounds] Image:[imageView image]];
 	[[self view] addSubview:iCanvas];
-	[imageView setHidden:YES];
+	[imageView setHidden:YES]; // create canvas
+	
+	// paint the canvas
+								//	for each brush radius Ri,
+								//		from largest to smallest do
+								//		{
+								//			// apply Gaussian blur
+								//			referenceImage=sourceImage*G(fσ Ri)
+								//			// paint a layer
+								//			paintLayer(canvas, referenceImage, Ri)
+								//
+								//		}
+								//	return canvas
 }
 
 #pragma mark -
@@ -157,10 +217,10 @@
 	// objectAtIndex:2 is flexible space bar item;
 	
 	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:3] setTarget:self];
-	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:3] setAction:@selector(rotateImageRight)];
+	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:3] setAction:@selector(rotateImageLeft)];
 	
 	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:4] setTarget:self];
-	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:4] setAction:@selector(rotateImageLeft)];
+	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:4] setAction:@selector(rotateImageRight)];
 	
 	// objectAtIndex:5 is flexible space bar item;
 	

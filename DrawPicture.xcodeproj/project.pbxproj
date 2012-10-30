@@ -26,6 +26,8 @@
 		EAB2A46E162671CA0092198A /* AboutMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2A46C162671CA0092198A /* AboutMeViewController.m */; };
 		EAB2A46F162671CA0092198A /* AboutMeViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAB2A46D162671CA0092198A /* AboutMeViewController_iPhone.xib */; };
 		EAB2A472162671EC0092198A /* AboutMeViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAB2A471162671EC0092198A /* AboutMeViewController_iPad.xib */; };
+		EAB5E915163F05B400F47725 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB5E914163F05B400F47725 /* libsqlite3.dylib */; };
+		EAB5E919163F86EF00F47725 /* defaultSetting.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = EAB5E918163F86EF00F47725 /* defaultSetting.sqlite */; };
 		EAC2E0CA1625481F00BA278C /* BrushViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC2E0C81625481F00BA278C /* BrushViewController.m */; };
 		EAC2E0CB1625481F00BA278C /* BrushViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAC2E0C91625481F00BA278C /* BrushViewController_iPhone.xib */; };
 		EAC2E0CD16254E1500BA278C /* BrushViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAC2E0CC16254E1500BA278C /* BrushViewController_iPad.xib */; };
@@ -63,6 +65,8 @@
 		EAB2A46C162671CA0092198A /* AboutMeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutMeViewController.m; sourceTree = "<group>"; };
 		EAB2A46D162671CA0092198A /* AboutMeViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutMeViewController_iPhone.xib; sourceTree = "<group>"; };
 		EAB2A471162671EC0092198A /* AboutMeViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutMeViewController_iPad.xib; sourceTree = "<group>"; };
+		EAB5E914163F05B400F47725 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		EAB5E918163F86EF00F47725 /* defaultSetting.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = defaultSetting.sqlite; sourceTree = "<group>"; };
 		EAC2E0C71625481F00BA278C /* BrushViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrushViewController.h; sourceTree = "<group>"; };
 		EAC2E0C81625481F00BA278C /* BrushViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrushViewController.m; sourceTree = "<group>"; };
 		EAC2E0C91625481F00BA278C /* BrushViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BrushViewController_iPhone.xib; sourceTree = "<group>"; };
@@ -81,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EAB5E915163F05B400F47725 /* libsqlite3.dylib in Frameworks */,
 				EAEC53EE1625834300B3BDB9 /* MobileCoreServices.framework in Frameworks */,
 				EAEC53EC1625833700B3BDB9 /* CoreImage.framework in Frameworks */,
 				EA6CF3EA16246E4B00E542E8 /* UIKit.framework in Frameworks */,
@@ -157,6 +162,7 @@
 		EA59FB561627E818000DCBCA /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				EAB5E90F163F058700F47725 /* database */,
 				EA59FB581627E820000DCBCA /* image */,
 			);
 			name = Resource;
@@ -193,6 +199,7 @@
 		EA6CF3E816246E4B00E542E8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EAB5E914163F05B400F47725 /* libsqlite3.dylib */,
 				EAEC53ED1625834300B3BDB9 /* MobileCoreServices.framework */,
 				EAEC53EB1625833700B3BDB9 /* CoreImage.framework */,
 				EA6CF3E916246E4B00E542E8 /* UIKit.framework */,
@@ -224,6 +231,14 @@
 				EA6CF3F716246E4B00E542E8 /* DrawPicture-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EAB5E90F163F058700F47725 /* database */ = {
+			isa = PBXGroup;
+			children = (
+				EAB5E918163F86EF00F47725 /* defaultSetting.sqlite */,
+			);
+			name = database;
 			sourceTree = "<group>";
 		};
 		EAC2E0C5162547A600BA278C /* AboutMe */ = {
@@ -337,6 +352,7 @@
 				EA59FB5E1627E8FA000DCBCA /* icon114.png in Resources */,
 				EA59FB601627E8FE000DCBCA /* icon144.png in Resources */,
 				EAE2EBD61627F94900D984C9 /* BrushRadCell.xib in Resources */,
+				EAB5E919163F86EF00F47725 /* defaultSetting.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

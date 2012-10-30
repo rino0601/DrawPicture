@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <sqlite3.h>
 
 @class RINViewController;
 
@@ -15,7 +16,7 @@
 }
 
 @property (strong, nonatomic) UIWindow *window;
-
+@property(nonatomic, readonly) sqlite3 *dbo;
 @property (strong, nonatomic) RINViewController *viewController;
 
 @end

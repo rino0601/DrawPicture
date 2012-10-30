@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <sqlite3.h>
 
 @interface BrushViewController : UIViewController <UITableViewDataSource, UITableViewDelegate> {
 	IBOutlet UISlider *howMany;

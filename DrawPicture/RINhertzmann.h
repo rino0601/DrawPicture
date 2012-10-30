@@ -15,8 +15,10 @@
 
 @interface RINhertzmann : UIView {
 	UIImage *src;
+	UIImage *resultUIImage;
 }
 
 - (id)initWithFrame:(CGRect)frame Image:(UIImage *)image;
+- (UIImage *)image;
 
 @end

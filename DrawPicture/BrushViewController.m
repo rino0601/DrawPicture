@@ -8,12 +8,36 @@
 
 #import "BrushViewController.h"
 #import "BrushRadCell.h"
-
-@interface BrushViewController ()
-
-@end
+#import "RINAppDelegate.h"
 
 @implementation BrushViewController
+
+- (void)LoadfromDatabase:(id)sender {
+	RINAppDelegate* delegate=(RINAppDelegate *)[[UIApplication sharedApplication] delegate];
+	sqlite3 *dbo = [delegate dbo];
+	sqlite3_stmt *localizer=NULL;
+
+	// sqlite3 seems that doesn't support count() in result column
+	int i=0;
+	sqlite3_prepare_v2(dbo, [@"SELECT radix  FROM BRUSH ORDER BY radix DESC" UTF8String], -1, &localizer, NULL);
+	while (sqlite3_step(localizer)==SQLITE_ROW) {
+		int kval=sqlite3_column_int(localizer, 0);
+		[brushes addObject:[DataBrush dataBrushWithName:[NSString stringWithFormat:@"order%2d",i+1] Value:kval lowerBound:0 upperBound:100]];
+		i++;
+	}
+	[howMany setValue:i];
+	[howManyL setText:[NSString stringWithFormat:@"%2d",(int)[howMany value]]];
+	sqlite3_finalize(localizer);// terminate
+}
+- (void)SavetoDatabase:(id)sender {
+	RINAppDelegate* delegate=(RINAppDelegate *)[[UIApplication sharedApplication] delegate];
+	sqlite3 *dbo = [delegate dbo];
+	sqlite3_stmt *localizer=NULL;
+	
+
+	
+	[[self navigationController] popViewControllerAnimated:YES];
+}
 
 - (IBAction)howManyValueChanged:(UISlider *)sender {
 	[howMany setValue:(int)[howMany value]];
@@ -50,13 +74,11 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-	[howManyL setText:[NSString stringWithFormat:@"%2d",(int)[howMany value]]];
+	
 	brushes = [[NSMutableArray alloc] init];
-	int k = (100/(int)[howMany value]);
-	int n = [howMany value];
-	for (int i=0 ; i<(int)[howMany value]; i++) {
-		[brushes addObject:[DataBrush dataBrushWithName:[NSString stringWithFormat:@"order%2d",i+1] Value:k*(2*n-2*i-1)/2 lowerBound:k*(n-1-i) upperBound:k*(n-i)]];
-	}
+	[[self navigationItem] setRightBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(SavetoDatabase:)]];
+	
+	[self LoadfromDatabase:nil];
 }
 
 - (void)viewDidUnload

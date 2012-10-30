@@ -11,7 +11,7 @@
 #import "RINViewController.h"
 
 @implementation RINAppDelegate
-
+@synthesize dbo;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -27,6 +27,23 @@
 	[[UIApplication sharedApplication] setStatusBarHidden:YES];
     [self.window makeKeyAndVisible];
 
+	
+	
+
+	NSFileManager *fm=[NSFileManager defaultManager];
+	NSArray *docuDir;
+	docuDir= NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *docuPath = [docuDir objectAtIndex:0];
+	if(![fm fileExistsAtPath:[docuPath stringByAppendingPathComponent:@"userSetting.sqlite"]]){
+		// mainBundle에서 defaultSetting.sqlite 복사해오기.
+		NSError * error;
+		[fm copyItemAtPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"defaultSetting.sqlite"] toPath:[docuPath stringByAppendingPathComponent:@"userSetting.sqlite"] error:&error];
+		if(error)
+			NSLog(@"%@",error);
+	}
+	sqlite3_open_v2([[docuPath stringByAppendingPathComponent:@"userSetting.sqlite"] UTF8String], &dbo, SQLITE_OPEN_READONLY, NULL);
+	
+	
     return YES;
 }
 
