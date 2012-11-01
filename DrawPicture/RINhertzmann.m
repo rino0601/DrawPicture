@@ -8,6 +8,9 @@
 
 #import "RINhertzmann.h"
 
+#define fg 1
+#define T 1
+
 @implementation RINhertzmann
 
 - (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSArray *)rad {
@@ -83,8 +86,7 @@
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 
-- (void)drawRect:(CGRect)rect
-{
+- (void)drawRect:(CGRect)rect {
 //	CGImageRef i=CGBitmapContextCreateImage(ctx);
 //	CGContextDrawImage(UIGraphicsGetCurrentContext(), [self bounds], i);
 //	CGImageRelease(i);
@@ -111,33 +113,71 @@
 - (void)paintLayer:(UIImage *)referenceImage radix:(CGFloat)R{
 //procedure paintLayer(canvas,referenceImage, R) {
 //	S := a new set of strokes, initially empty
-	NSMutableArray *S_strok=[NSMutableArray array];
+	NSMutableArray *S_strok=[NSMutableArray array]; // it is 2 dimention CGPoint array
 //	// create a pointwise difference image
 //	D := difference(canvas,referenceImage)
 	NSArray *D = [self difference:[self image] referenceImage:referenceImage];
 
 	//	grid := fg R
-	CGFloat fg = 1.0f;
 	CGFloat grid = fg*R;
 
 //	for x=0 to imageWidth stepsize grid do
-//		for y=0 to imageHeight stepsize grid do {
-//			// sum the error near (x,y)
+	for(int h = 0 ; h < [D count] ; h+=grid) {
+//		for y=0 to imageHeight stepsize grid do
+		NSArray *col = [D objectAtIndex:h]; // I need [it's count]
+		for(int w = 0 ; w < [col count] ; w+= grid) {
+//			// sum the error near (w,h) w:x h:y
 //			M := the region (x-grid/2..x+grid/2,
 //							 y-grid/2..y+grid/2)
 //			areaError := ∑ D / grid2 i , j∈M i,j
-//			if (areaError > T) then {
-//				// find the largest error point
-//				(x1,y1) := arg max i, j ∈M Di,j
-//				s :=makeStroke(R,x1,y1,referenceImage)
-//				add s to S }
-//		}
+			int areaError = [self getAreaError:D x:w y:h grid:grid];// x,y as a start point
+			
+//			if (areaError > T) then 
+			if (areaError > T) {
+				// find the largest error point
+				//				(x1,y1) := arg max i, j ∈M Di,j
+				//				s :=makeStroke(R,x1,y1,referenceImage)
+				//				add s to S }
+				CGPoint arg = [self getAreaMax:D x:w y:h grid:grid];
+				[S_strok addObject:[self makeStroke:R point:arg referenceImage:referenceImage]];
+			}
+		}
+	}
 //	paint all strokes in S on the canvas, in random order
-//}
-	
+	//throw S_strok to drawing Method
 }
 
--(NSArray *)difference:(UIImage *)canvas referenceImage:(UIImage *)refImg{
+- (int)getAreaError:(NSArray *)binA x:(int)x y:(int)y grid:(CGFloat)grid { 
+	int areaError=0;
+	for (int i =y-grid/2 ; i < y+grid/2 ; i++) {
+		if(i<0) continue;
+		for (int j = x-grid/2 ; j < x+grid/2 ; j++) {
+			if(j<0) continue;
+			NSNumber *num = [[binA objectAtIndex:i] objectAtIndex:j];
+			areaError+=[num intValue];
+		}
+	}
+	return areaError;
+}
+
+- (CGPoint)getAreaMax:(NSArray *)binA x:(int)x y:(int)y grid:(CGFloat)grid { 
+	int max=0;
+	CGPoint point;
+	for (int i =y-grid/2 ; i < y+grid/2 ; i++) {
+		if(i<0) continue;
+		for (int j = x-grid/2 ; j < x+grid/2 ; j++) {
+			if(j<0) continue;
+			NSNumber *num = [[binA objectAtIndex:i] objectAtIndex:j];
+			if([num intValue]>max) {
+				max=[num intValue];
+				point = CGPointMake(j, i);
+			}
+		}
+	}
+	return point;
+}
+
+-(NSArray *)difference:(UIImage *)canvas referenceImage:(UIImage *)refImg{ // return 2 dimention NSNumber array
 	NSArray *canvasArray, *referenceArray;
 	canvasArray = [self getRGBAsFromImage:canvas];
 	referenceArray = [self getRGBAsFromImage:refImg];
@@ -169,7 +209,7 @@
 	return difference;
 }
 
-- (NSArray *)getRGBAsFromImage:(UIImage*)image { // return 2 dimention array
+- (NSArray *)getRGBAsFromImage:(UIImage*)image { // return 2 dimention NSColor array
     NSMutableArray *result = [NSMutableArray array];
 	
     // First get the image into your data buffer
@@ -207,7 +247,13 @@
 	return result;
 }
 
-- (NSArray *)makeStroke:(CGFloat)R x:(int)x y:(int)y referenceImage:(UIImage *)refImage {//retrun CGPoint array
+- (NSArray *)makeStroke:(CGFloat)R point:(CGPoint)pt referenceImage:(UIImage *)refImage {//retrun CGPoint array
+	// 소벨 엗지가 필요한데....
+		// 1. openCV를 적용한다.
+			// 이 경우 위에 짜논 코드를 전면 수정해야 할지도 모르나, 성능은 보장되겠지.
+		// 2. 내가 직접 만든다 ㅡㅡ
+			// openCV적용하는 것 보다 쉬울수도 있고, 아닐 수 도 있음.
+			// 성능이 보장되지 않아....
 //function makeSplineStroke(x0,y0,R,refImage) {
 //	strokeColor = refImage.color(x0,y0) K = a new stroke with radius R
 //	and color strokeColor add point (x0,y0) to K
