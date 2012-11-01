@@ -10,6 +10,7 @@
 		EA204ECE16247569000E3483 /* PreferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA204ECC16247569000E3483 /* PreferenceViewController.m */; };
 		EA204ECF16247569000E3483 /* PreferenceViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA204ECD16247569000E3483 /* PreferenceViewController_iPhone.xib */; };
 		EA204ED11624759D000E3483 /* PreferenceViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA204ED01624759D000E3483 /* PreferenceViewController_iPad.xib */; };
+		EA4A7A121642632400DAE5A5 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4A7A111642632400DAE5A5 /* opencv2.framework */; };
 		EA59FB5A1627E890000DCBCA /* icon72.png in Resources */ = {isa = PBXBuildFile; fileRef = EA59FB591627E890000DCBCA /* icon72.png */; };
 		EA59FB5C1627E8F4000DCBCA /* icon57.png in Resources */ = {isa = PBXBuildFile; fileRef = EA59FB5B1627E8F4000DCBCA /* icon57.png */; };
 		EA59FB5E1627E8FA000DCBCA /* icon114.png in Resources */ = {isa = PBXBuildFile; fileRef = EA59FB5D1627E8FA000DCBCA /* icon114.png */; };
@@ -43,6 +44,7 @@
 		EA204ECC16247569000E3483 /* PreferenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferenceViewController.m; sourceTree = "<group>"; };
 		EA204ECD16247569000E3483 /* PreferenceViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceViewController_iPhone.xib; sourceTree = "<group>"; };
 		EA204ED01624759D000E3483 /* PreferenceViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceViewController_iPad.xib; sourceTree = "<group>"; };
+		EA4A7A111642632400DAE5A5 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = Library/Frameworks/opencv2.framework; sourceTree = DEVELOPER_DIR; };
 		EA59FB591627E890000DCBCA /* icon72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon72.png; path = ../icon72.png; sourceTree = "<group>"; };
 		EA59FB5B1627E8F4000DCBCA /* icon57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon57.png; path = ../icon57.png; sourceTree = "<group>"; };
 		EA59FB5D1627E8FA000DCBCA /* icon114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon114.png; path = ../icon114.png; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA4A7A121642632400DAE5A5 /* opencv2.framework in Frameworks */,
 				EAB5E915163F05B400F47725 /* libsqlite3.dylib in Frameworks */,
 				EAEC53EE1625834300B3BDB9 /* MobileCoreServices.framework in Frameworks */,
 				EAEC53EC1625833700B3BDB9 /* CoreImage.framework in Frameworks */,
@@ -199,6 +202,7 @@
 		EA6CF3E816246E4B00E542E8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EA4A7A111642632400DAE5A5 /* opencv2.framework */,
 				EAB5E914163F05B400F47725 /* libsqlite3.dylib */,
 				EAEC53ED1625834300B3BDB9 /* MobileCoreServices.framework */,
 				EAEC53EB1625833700B3BDB9 /* CoreImage.framework */,
@@ -458,6 +462,15 @@
 		EA6CF40716246E4B00E542E8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../FrameWork\"",
+					"\"$(SRCROOT)\"",
+					"\"$(SYSTEM_APPS_DIR)/Xcode44-DP6.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DrawPicture/DrawPicture-Prefix.pch";
 				INFOPLIST_FILE = "DrawPicture/DrawPicture-Info.plist";
@@ -470,6 +483,15 @@
 		EA6CF40816246E4B00E542E8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../FrameWork\"",
+					"\"$(SRCROOT)\"",
+					"\"$(SYSTEM_APPS_DIR)/Xcode44-DP6.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DrawPicture/DrawPicture-Prefix.pch";
 				INFOPLIST_FILE = "DrawPicture/DrawPicture-Info.plist";

@@ -248,6 +248,8 @@
 }
 
 - (NSArray *)makeStroke:(CGFloat)R point:(CGPoint)pt referenceImage:(UIImage *)refImage {//retrun CGPoint array
+	IplImage input;
+	
 	// 소벨 엗지가 필요한데....
 		// 1. openCV를 적용한다.
 			// 이 경우 위에 짜논 코드를 전면 수정해야 할지도 모르나, 성능은 보장되겠지.
