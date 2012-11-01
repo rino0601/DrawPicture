@@ -160,15 +160,9 @@
         [alert show];
 		return ;
 	}
-	if(iCanvas!=nil){
-		[iCanvas removeFromSuperview];	
-	}
-	iCanvas = [[RINhertzmann alloc] initWithFrame:[[UIScreen mainScreen] bounds] Image:[imageView image]];
-	[[self view] addSubview:iCanvas];
-	[imageView setHidden:YES]; // create canvas
 	
 	// paint the canvas
-	NSMutableArray *Radixes = [[NSMutableArray alloc] init];
+	NSMutableArray *Radixes = [NSMutableArray array];
 	RINAppDelegate* delegate=(RINAppDelegate *)[[UIApplication sharedApplication] delegate];
 	sqlite3 *dbo = [delegate dbo];
 	sqlite3_stmt *localizer=NULL;
@@ -179,19 +173,15 @@
 	}
 	sqlite3_finalize(localizer);//Radixes initializing done.
 	
-	// canvas인 iCanvas에게 Radixes를 전달하고 끝내야 할지도 모름.
-	//이하 과정은 그 안에서.
-	
-	for(NSNumber *num in Radixes){//	for each brush radius Ri, from largest to smallest do
-		//		{
-		//			// apply Gaussian blur
-		//			referenceImage=sourceImage*G(fσ Ri)
-		//			// paint a layer
-		//			paintLayer(canvas, referenceImage, Ri)
-		//
-		//		}
-		//	return canvas
+	if(iCanvas!=nil){
+		[iCanvas removeFromSuperview];
 	}
+	iCanvas = [[RINhertzmann alloc] initWithFrame:[[UIScreen mainScreen] bounds] Image:[imageView image] Radixes:Radixes];
+	[[self view] addSubview:iCanvas];
+	[imageView setHidden:YES]; // create canvas
+	
+	// canvas인 iCanvas에게 Radixes를 전달하고 종료. 나머지 알고리즘은 iCanvas에서.
+	[iCanvas beginPaint];
 }
 
 #pragma mark -

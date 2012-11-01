@@ -16,9 +16,14 @@
 @interface RINhertzmann : UIView {
 	UIImage *src;
 	UIImage *resultUIImage;
+	NSArray *radixes;
+	CGContextRef ctx;
+	CGImageRef cif;
+	CGFloat cRed, cGreen, cBlue, cAlpha, wLine;
 }
 
-- (id)initWithFrame:(CGRect)frame Image:(UIImage *)image;
+- (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSArray *)rad;
+- (void)beginPaint;
 - (UIImage *)image;
 
 @end
