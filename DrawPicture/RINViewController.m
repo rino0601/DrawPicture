@@ -9,6 +9,7 @@
 #import "RINViewController.h"
 #import "PreferenceViewController.h"
 #import "RINhertzmann.h"
+//#import "TestHertzmann.h"
 #import "RINAppDelegate.h"
 
 
@@ -176,6 +177,7 @@
 	if(iCanvas!=nil){
 		[iCanvas removeFromSuperview];
 	}
+//	iCanvas = [[TestHertzmann alloc] initWithFrame:[[UIScreen mainScreen] bounds] Image:[imageView image] Radixes:Radixes];
 	iCanvas = [[RINhertzmann alloc] initWithFrame:[[UIScreen mainScreen] bounds] Image:[imageView image] Radixes:Radixes];
 	[[self view] addSubview:iCanvas];
 	[imageView setHidden:YES]; // create canvas

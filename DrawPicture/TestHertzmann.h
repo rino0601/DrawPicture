@@ -8,22 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <opencv2/opencv.hpp>
-
-@interface DataHertzmann : NSObject
-
-@end
-
-
-@interface RINhertzmann : UIView {
+@interface TestHertzmann : UIView {
 	UIImage *src;
 	UIImage *resultUIImage;
 	NSArray *radixes;
 	CGContextRef ctx;
 	CGImageRef cif;
 	CGFloat cRed, cGreen, cBlue, cAlpha, wLine;
-	
-	NSMutableArray *C_strok;
-	IplImage *dX, *dY;
 }
 
 - (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSArray *)rad;

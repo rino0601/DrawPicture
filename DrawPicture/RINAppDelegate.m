@@ -33,7 +33,7 @@
 	NSFileManager *fm=[NSFileManager defaultManager];
 	NSArray *docuDir;
 	docuDir= NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *docuPath = [docuDir objectAtIndex:0];
+	NSString *docuPath = [docuDir objectAtIndex:0]; // fix to shorter method
 	if(![fm fileExistsAtPath:[docuPath stringByAppendingPathComponent:@"userSetting.sqlite"]]){
 		// mainBundle에서 defaultSetting.sqlite 복사해오기.
 		NSError * error;
