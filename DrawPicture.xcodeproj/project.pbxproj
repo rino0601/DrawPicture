@@ -488,6 +488,7 @@
 					"\"$(SRCROOT)/../../FrameWork\"",
 					"\"$(SRCROOT)\"",
 					"\"$(SYSTEM_APPS_DIR)/Xcode44-DP6.app/Contents/Developer/Library/Frameworks\"",
+					"\"$(SYSTEM_APPS_DIR)/Xcode45-DP1.app/Contents/Developer/Library/Frameworks\"",
 				);
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
@@ -509,6 +510,7 @@
 					"\"$(SRCROOT)/../../FrameWork\"",
 					"\"$(SRCROOT)\"",
 					"\"$(SYSTEM_APPS_DIR)/Xcode44-DP6.app/Contents/Developer/Library/Frameworks\"",
+					"\"$(SYSTEM_APPS_DIR)/Xcode45-DP1.app/Contents/Developer/Library/Frameworks\"",
 				);
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;

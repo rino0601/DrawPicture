@@ -46,7 +46,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-		lowerBound = 0;
+		lowerBound = 1;
 		upperBound = 99;
     }
     return self;

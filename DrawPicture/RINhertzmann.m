@@ -10,7 +10,7 @@
 #import "UIImageCVArrConverter.h"
 
 #define fg 					1
-#define T 					1
+#define T 					200
 #define MAX_STROKE_LENGTH	10
 #define MIN_STROKE_LENGTH	3
 #define CURVATURE_FILTER	0.5
@@ -126,8 +126,9 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		cvAdd(x1, x2, dX);	cvAdd(y1, y2, dY);
 		
 		// paint a layer
-		[self paintLayer:[UIImage imageWithCGImage:cif] radix:[num floatValue]];
-	}	
+//		[self paintLayer:[UIImage imageWithCGImage:cif] radix:[num floatValue]]; //with gausian blurr
+		[self paintLayer:src radix:[num floatValue]]; //no gausian blurr
+	}
 }
 
 - (UIImage *)image {
@@ -140,8 +141,6 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		i++;
 	}
 	[UIImagePNGRepresentation(resultUIImage) writeToFile:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]atomically:NO];
-	return resultUIImage;
-
 	return resultUIImage;
 }
 
@@ -180,22 +179,25 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 //	S := a new set of strokes, initially empty
 	NSMutableArray *S_strok=[NSMutableArray array]; // it is 2 dimention CGPoint array
 //	// create a pointwise difference image
-//	D := difference(canvas,referenceImage)
-	NSArray *D = [self difference:[self image] referenceImage:referenceImage];
+//	D := difference(canvas,referenceImage) // 메모리 문제로 폐기. 320*480 이 860MB 이상 필요한데, 아이폰 전체 메모리가 512MB인걸....
+//	NSArray *D = [self difference:[self image] referenceImage:referenceImage];
+	IplImage *iplCanvas = [UIImageCVArrConverter CreateIplImageFromUIImage:[self image]];
+	IplImage *iplRefimg = [UIImageCVArrConverter CreateIplImageFromUIImage:referenceImage];
 	
 	//	grid := fg R
 	CGFloat grid = fg*R;
 
 //	for x=0 to imageWidth stepsize grid do
-	for(int h = 0 ; h < [D count] ; h+=grid) {
+	for(int h = 0 ; h < iplCanvas->height ; h+=grid) {
 //		for y=0 to imageHeight stepsize grid do
-		NSArray *col = [D objectAtIndex:h]; // I need [it's count]
-		for(int w = 0 ; w < [col count] ; w+= grid) {
+		for(int w = 0 ; w < iplCanvas->width ; w+= grid) {
 //			// sum the error near (w,h) w:x h:y
 //			M := the region (x-grid/2..x+grid/2,
 //							 y-grid/2..y+grid/2)
 //			areaError := ∑ D / grid2 i , j∈M i,j
-			int areaError = [self getAreaError:D x:w y:h grid:grid];// x,y as a start point
+			if(grid==0)// 0일 리는 없지만.
+				grid=0.0001f;
+			int areaError = [self getAreaError:iplCanvas reference:iplRefimg x:w y:h grid:grid]/(grid*grid);// x,y as a start point
 			
 //			if (areaError > T) then 
 			if (areaError > T) {
@@ -203,7 +205,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 				//				(x1,y1) := arg max i, j ∈M Di,j
 				//				s :=makeStroke(R,x1,y1,referenceImage)
 				//				add s to S }
-				CGPoint arg = [self getAreaMax:D x:w y:h grid:grid];
+				CGPoint arg = [self getAreaMax:iplCanvas reference:iplRefimg x:w y:h grid:grid];
 				[S_strok addObject:[self makeStroke:R point:arg referenceImage:referenceImage]];
 			}
 		}
@@ -214,75 +216,69 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	
 }
 
-- (int)getAreaError:(NSArray *)binA x:(int)x y:(int)y grid:(CGFloat)grid { 
+- (int)getAreaError:(IplImage *)canvas reference:(IplImage *)refImg x:(int)x y:(int)y grid:(CGFloat)grid { // int?
 	int areaError=0;
 	for (int i =y-grid/2 ; i < y+grid/2 ; i++) {
 		if(i<0) continue;
 		for (int j = x-grid/2 ; j < x+grid/2 ; j++) {
 			if(j<0) continue;
-			NSNumber *num = [[binA objectAtIndex:i] objectAtIndex:j];
-			areaError+=[num intValue];
+			
+			CvScalar can, ref;
+			can = cvGet2D(canvas, i, j);
+			ref = cvGet2D(refImg, i, j);
+			
+			float diff=0;
+			diff+= (can.val[0]-ref.val[0])*(can.val[0]-ref.val[0]);
+			diff+= (can.val[1]-ref.val[1])*(can.val[1]-ref.val[1]);
+			diff+= (can.val[2]-ref.val[2])*(can.val[2]-ref.val[2]);
+			diff=sqrt(diff);
+			
+			areaError+=diff;
 		}
 	}
 	return areaError;
 }
 
-- (CGPoint)getAreaMax:(NSArray *)binA x:(int)x y:(int)y grid:(CGFloat)grid { 
-	int max=0;
+- (CGPoint)getAreaMax:(IplImage *)canvas reference:(IplImage *)refImg x:(int)x y:(int)y grid:(CGFloat)grid {
+	float max=0;
 	CGPoint point;
 	for (int i =y-grid/2 ; i < y+grid/2 ; i++) {
 		if(i<0) continue;
 		for (int j = x-grid/2 ; j < x+grid/2 ; j++) {
 			if(j<0) continue;
-			NSNumber *num = [[binA objectAtIndex:i] objectAtIndex:j];
-			if([num intValue]>max) {
-				max=[num intValue];
+			
+			CvScalar can, ref;
+			can = cvGet2D(canvas, i, j);
+			ref = cvGet2D(refImg, i, j);
+			
+			float diff=0;
+			diff+= (can.val[0]-ref.val[0])*(can.val[0]-ref.val[0]);
+			diff+= (can.val[1]-ref.val[1])*(can.val[1]-ref.val[1]);
+			diff+= (can.val[2]-ref.val[2])*(can.val[2]-ref.val[2]);
+			diff=sqrt(diff);
+			
+			if(diff>max) {
+				max=diff;
 				point = CGPointMake(j, i);
 			}
+			
 		}
 	}
 	return point;
 }
 
--(NSArray *)difference:(UIImage *)canvas referenceImage:(UIImage *)refImg {
-	IplImage *iCanvas = [UIImageCVArrConverter CreateIplImageFromUIImage:canvas];
-	IplImage *iRefImg = [UIImageCVArrConverter CreateIplImageFromUIImage:refImg];
-	
-	NSMutableArray *difference =[NSMutableArray array];
-	
-	int cR,cG,cB,rR,rG,rB;
-	
-	for (int i=0 ; i<iCanvas->height ; i++) {
-		NSMutableArray *col = [NSMutableArray array];
-		for (int j =0 ; j<iCanvas->widthStep ; j++) {
-			float diff = 0;
-			cR = iCanvas->imageData[(i*iCanvas->widthStep) + j*iCanvas->nChannels + 0];
-			cG = iCanvas->imageData[(i*iCanvas->widthStep) + j*iCanvas->nChannels + 1];
-			cB = iCanvas->imageData[(i*iCanvas->widthStep) + j*iCanvas->nChannels + 2];
-			rR = iRefImg->imageData[(i*iRefImg->widthStep) + j*iRefImg->nChannels + 0];
-			rG = iRefImg->imageData[(i*iRefImg->widthStep) + j*iRefImg->nChannels + 1];
-			rB = iRefImg->imageData[(i*iRefImg->widthStep) + j*iRefImg->nChannels + 2];
-			
-			diff += (cR-rR)*(cR-rR);
-			diff += (cG-rG)*(cG-rG);
-			diff += (cB-rB)*(cB-rB);
-			diff=sqrt(diff);
-			[col addObject:[NSNumber numberWithFloat:diff]];
-		}
-		[difference addObject:col];
-	}
-	return difference;	
-}
-
 - (NSArray *)makeStroke:(CGFloat)R point:(CGPoint)pt referenceImage:(UIImage *)refImage {//retrun CGPoint array
+	// 여기 코드 줄여야 한다.
 //function makeSplineStroke(x0,y0,R,refImage) {
 	IplImage *iRefImage = [UIImageCVArrConverter CreateIplImageFromUIImage:refImage];
 	IplImage *iCanvas   = [UIImageCVArrConverter CreateIplImageFromUIImage:[self image]];
 	
-	//strokeColor = refImage.color(x0,y0) iCanvas->imageData[(i*iCanvas->widthStep) + j*3 + 0];
-	int strokeColorB = iRefImage->imageData[ (((int)pt.y)*iRefImage->widthStep) + ((int)pt.x)*3 + 0];
-	int strokeColorG = iRefImage->imageData[ (((int)pt.y)*iRefImage->widthStep) + ((int)pt.x)*3 + 1];
-	int strokeColorR = iRefImage->imageData[ (((int)pt.y)*iRefImage->widthStep) + ((int)pt.x)*3 + 2];
+	CvScalar strokeColor, RefColor, CanvasColor;
+	
+	//strokeColor = refImage.color(x0,y0)
+		// 바운드 정해야한다.
+	// pt는 bound 안에서 생성된 좌표이므로 수정 필요 없음.
+	strokeColor = cvGet2D(iRefImage, (int)pt.y, (int)pt.x);
 	
 	//K = a new stroke with radius R // R은 바깥에서 처리하고, Color는 동적배열하나 더 쓴다ㅠ
 	//	and color strokeColor add point (x0,y0) to K
@@ -298,21 +294,18 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		
 		float diffwc=0, diffws=0;
 		
-		int RefColorB = iRefImage->imageData[ (((int)xy.y)*iRefImage->widthStep) + ((int)xy.x)*3 + 0];
-		int RefColorG = iRefImage->imageData[ (((int)xy.y)*iRefImage->widthStep) + ((int)xy.x)*3 + 1];
-		int RefColorR = iRefImage->imageData[ (((int)xy.y)*iRefImage->widthStep) + ((int)xy.x)*3 + 2];
-		int CanvasColorB = iCanvas->imageData[ (((int)xy.y)*iCanvas->widthStep) + ((int)xy.x)*3 + 0];
-		int CanvasColorG = iCanvas->imageData[ (((int)xy.y)*iCanvas->widthStep) + ((int)xy.x)*3 + 1];
-		int CanvasColorR = iCanvas->imageData[ (((int)xy.y)*iCanvas->widthStep) + ((int)xy.x)*3 + 2];
+			// 바운드 정해야한다.
+		RefColor = cvGet2D(iRefImage, (int)xy.y, (int)xy.x);
+		CanvasColor = cvGet2D(iCanvas, (int)xy.y, (int)xy.x);
 		
-		diffwc+=(RefColorB-CanvasColorB)*(RefColorB-CanvasColorB);
-		diffwc+=(RefColorG-CanvasColorG)*(RefColorG-CanvasColorG);
-		diffwc+=(RefColorR-CanvasColorR)*(RefColorR-CanvasColorR);
+		diffwc+=(RefColor.val[0]-CanvasColor.val[0])*(RefColor.val[0]-CanvasColor.val[0]);
+		diffwc+=(RefColor.val[1]-CanvasColor.val[1])*(RefColor.val[1]-CanvasColor.val[1]);
+		diffwc+=(RefColor.val[2]-CanvasColor.val[2])*(RefColor.val[2]-CanvasColor.val[2]);
 		diffwc = sqrtf(diffwc);
 
-		diffws+=(RefColorB-strokeColorB)*(RefColorB-strokeColorB);
-		diffws+=(RefColorG-strokeColorG)*(RefColorG-strokeColorG);
-		diffws+=(RefColorR-strokeColorR)*(RefColorR-strokeColorR);
+		diffws+=(RefColor.val[0]-strokeColor.val[0])*(RefColor.val[0]-strokeColor.val[0]);
+		diffws+=(RefColor.val[1]-strokeColor.val[1])*(RefColor.val[1]-strokeColor.val[1]);
+		diffws+=(RefColor.val[2]-strokeColor.val[2])*(RefColor.val[2]-strokeColor.val[2]);
 		diffws = sqrtf(diffws);
 		
 		//		if (i > minStrokeLength and |refImage.color(x,y)-canvas.color(x,y)|< |refImage.color(x,y)-strokeColor|)		
@@ -320,8 +313,10 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 			return K;
 
 		//		// detect vanishing gradient
-		CvScalar vX=cvGet2D(dX, (int)xy.x, (int)xy.y);
-		CvScalar vY=cvGet2D(dY, (int)xy.x, (int)xy.y);
+			// 바운드 정해야한다.
+			// 하단에서 처리.
+		CvScalar vX=cvGet2D(dX, (int)xy.y, (int)xy.x);
+		CvScalar vY=cvGet2D(dY, (int)xy.y, (int)xy.x);
 		float ax = vX.val[0]*vX.val[0];
 		float ay = vY.val[0]*vY.val[0];
 		float mag = sqrtf(ax+ay);
@@ -350,12 +345,21 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		
 		//		(dx,dy) := (dx,dy)/(dx2 + dy2)1/2
 		float size = sqrtf((dx*dx)+(dy*dy));
+		if(size==0)
+			size=0.0001f;
 		dx=dx/size;		dy=dy/size;
 		
 		//		(x,y) := (x+R*dx, y+R*dy)
 		xy.x = xy.x + R*dx;		xy.y = xy.y + R*dy;
+		if(xy.x < 0)	xy.x = 0;
+		if(xy.y < 0)	xy.y = 0;
+		if(xy.x > iCanvas->width)	xy.x = iCanvas->width;
+		if(xy.y > iCanvas->height)	xy.y = iCanvas->height;
 		//		(lastDx,lastDy) := (dx,dy)
-		lastDx = xy.x;			lastDy = xy.y;
+		lastDx = dx;			lastDy = dy;
+		
+	
+		
 		//		add the point (x,y) to K
 		[K addObject:[NSValue valueWithCGPoint:xy]];
 	}
