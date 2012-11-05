@@ -82,8 +82,14 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		
 		C_strok = [NSMutableArray array];
 		
+		IplImage *dump = [UIImageCVArrConverter CreateIplImageFromUIImage:src];
+		IplImage *x1, *x2, *y1, *y2;
+		x1=RIN_sobel_edge(dump, 0, 1);	x2=RIN_sobel_edge(dump, 0, -1);	y1=RIN_sobel_edge(dump, 1, 1);	y2=RIN_sobel_edge(dump, 1, -1);
+		dX = cvCloneImage(dump);	dY = cvCloneImage(dump);
+		cvAdd(x1, x2, dX);	cvAdd(y1, y2, dY);
+		
 		CGColorSpaceRef cs=CGColorSpaceCreateDeviceRGB();
-		ctx=CGBitmapContextCreate(NULL, frame.size.width, frame.size.height, 8, 4*frame.size.width, cs, kCGImageAlphaPremultipliedFirst); // what is mode doing ?
+		ctx=CGBitmapContextCreate(NULL, dump->width, dump->height, 8, 4*dump->width, cs, kCGImageAlphaPremultipliedFirst); 
 		CGColorSpaceRelease(cs);
 		CGContextSetLineWidth(ctx, wLine);
 		CGContextSetLineCap(ctx, kCGLineCapRound);
@@ -107,7 +113,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	//return canvas
 	
 	//radixes are desc order
-	
+	debug_layer=0;
 	for (NSNumber *num in radixes) {//	for each brush radius Ri, from largest to smallest do
 //		// apply Gaussian blur
 //		CIImage *ciImage = [[CIImage alloc] initWithImage:src];
@@ -119,28 +125,28 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 //		CIContext *context = [CIContext contextWithOptions:nil];
 //	    cif = [context createCGImage:image fromRect:image.extent];
 		
-		IplImage *dump = [UIImageCVArrConverter CreateIplImageFromUIImage:src];
-		IplImage *x1, *x2, *y1, *y2;
-		x1=RIN_sobel_edge(dump, 0, 1);	x2=RIN_sobel_edge(dump, 0, -1);	y1=RIN_sobel_edge(dump, 1, 1);	y2=RIN_sobel_edge(dump, 1, -1);
-		dX = cvCloneImage(dump);	dY = cvCloneImage(dump);
-		cvAdd(x1, x2, dX);	cvAdd(y1, y2, dY);
-		
 		// paint a layer
 //		[self paintLayer:[UIImage imageWithCGImage:cif] radix:[num floatValue]]; //with gausian blurr
 		[self paintLayer:src radix:[num floatValue]]; //no gausian blurr
+		NSLog(@"%dth paintLayer Done",++debug_layer);
 	}
+	NSLog(@"app calculate is done.");
 }
 
 - (UIImage *)image {
 	resultUIImage = UIGraphicsGetImageFromImageContext(ctx);
-	NSString *fileName = @"layer.png";
+	
+	NSString *fileName = @"layer";
 	NSFileManager *fm = [NSFileManager defaultManager];
 	int i=0;
 	while([fm fileExistsAtPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]]==YES){
-		fileName = [NSString stringWithFormat:@"layer%d.png",i];
+		fileName = [NSString stringWithFormat:@"layer%d",i];
 		i++;
 	}
-	[UIImagePNGRepresentation(resultUIImage) writeToFile:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]atomically:NO];
+	[UIImagePNGRepresentation(resultUIImage) writeToFile:[NSTemporaryDirectory() stringByAppendingPathComponent:[fileName stringByAppendingString:@".png"]]atomically:NO]; // alpha 값이 0으로 들어가서 아마 아무것도 안나올 가능성이 큼.
+	[UIImageJPEGRepresentation(resultUIImage, 1.0) writeToFile:[NSTemporaryDirectory() stringByAppendingPathComponent:[fileName stringByAppendingString:@".jpg"]] atomically:NO]; // 실제로 어쩐지 알기 위함
+	// for science.
+	
 	return resultUIImage;
 }
 
@@ -188,6 +194,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	CGFloat grid = fg*R;
 
 //	for x=0 to imageWidth stepsize grid do
+	debug_stroke=0;
 	for(int h = 0 ; h < iplCanvas->height ; h+=grid) {
 //		for y=0 to imageHeight stepsize grid do
 		for(int w = 0 ; w < iplCanvas->width ; w+= grid) {
@@ -197,6 +204,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 //			areaError := ∑ D / grid2 i , j∈M i,j
 			if(grid==0)// 0일 리는 없지만.
 				grid=0.0001f;
+			
 			int areaError = [self getAreaError:iplCanvas reference:iplRefimg x:w y:h grid:grid]/(grid*grid);// x,y as a start point
 			
 //			if (areaError > T) then 
@@ -207,24 +215,26 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 				//				add s to S }
 				CGPoint arg = [self getAreaMax:iplCanvas reference:iplRefimg x:w y:h grid:grid];
 				[S_strok addObject:[self makeStroke:R point:arg referenceImage:referenceImage]];
+				NSLog(@"%dth makeStroke is done",++debug_stroke);
 			}
 		}
 	}
 //	paint all strokes in S on the canvas, in random order
 	//throw S_strok to drawing Method
 	[self changeWidth:R];
-	
 }
 
 - (int)getAreaError:(IplImage *)canvas reference:(IplImage *)refImg x:(int)x y:(int)y grid:(CGFloat)grid { // int?
 	int areaError=0;
 	for (int i =y-grid/2 ; i < y+grid/2 ; i++) {
-		if(i<0) continue;
+		if(i<0)	continue;
+		if(i>=canvas->height)	continue;
 		for (int j = x-grid/2 ; j < x+grid/2 ; j++) {
 			if(j<0) continue;
-			
+			if(j>=canvas->width)	continue;
 			CvScalar can, ref;
-			can = cvGet2D(canvas, i, j);
+			
+			can = cvGet2D(canvas, i, j); //(256,320)
 			ref = cvGet2D(refImg, i, j);
 			
 			float diff=0;
@@ -244,8 +254,10 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	CGPoint point;
 	for (int i =y-grid/2 ; i < y+grid/2 ; i++) {
 		if(i<0) continue;
+		if(i>=canvas->height)	continue;
 		for (int j = x-grid/2 ; j < x+grid/2 ; j++) {
 			if(j<0) continue;
+			if(j>=canvas->width)	continue;
 			
 			CvScalar can, ref;
 			can = cvGet2D(canvas, i, j);
@@ -308,7 +320,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		diffws+=(RefColor.val[2]-strokeColor.val[2])*(RefColor.val[2]-strokeColor.val[2]);
 		diffws = sqrtf(diffws);
 		
-		//		if (i > minStrokeLength and |refImage.color(x,y)-canvas.color(x,y)|< |refImage.color(x,y)-strokeColor|)		
+		//		if (i > minStrokeLength and |refImage.color(x,y)-canvas.color(x,y)|< |refImage.color(x,y)-strokeColor|)
 		if(i > MIN_STROKE_LENGTH && diffwc < diffws )
 			return K;
 
@@ -353,12 +365,10 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		xy.x = xy.x + R*dx;		xy.y = xy.y + R*dy;
 		if(xy.x < 0)	xy.x = 0;
 		if(xy.y < 0)	xy.y = 0;
-		if(xy.x > iCanvas->width)	xy.x = iCanvas->width;
-		if(xy.y > iCanvas->height)	xy.y = iCanvas->height;
+		if(xy.x >= iCanvas->width)	xy.x = iCanvas->width-1;
+		if(xy.y >= iCanvas->height)	xy.y = iCanvas->height-1;
 		//		(lastDx,lastDy) := (dx,dy)
 		lastDx = dx;			lastDy = dy;
-		
-	
 		
 		//		add the point (x,y) to K
 		[K addObject:[NSValue valueWithCGPoint:xy]];

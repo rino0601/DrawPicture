@@ -24,6 +24,9 @@
 	
 	NSMutableArray *C_strok;
 	IplImage *dX, *dY;
+	
+	int debug_layer;
+	int debug_stroke;
 }
 
 - (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSArray *)rad;
