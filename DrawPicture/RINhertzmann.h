@@ -15,18 +15,21 @@
 
 
 @interface RINhertzmann : UIView {
-	UIImage *src;
-	UIImage *resultUIImage;
-	NSArray *radixes;
-	CGContextRef ctx;
-	CGImageRef cif;
-	CGFloat cRed, cGreen, cBlue, cAlpha, wLine;
-	
+	UIImage *src; //need? as input
+	UIImage *resultUIImage; //need as output
+	NSArray *radixes; // need!! as input
 	NSMutableArray *C_strok;
 	IplImage *dX, *dY;
+	IplImage *iplCanvas, *iplRefImg;
 	
-	int debug_layer;
-	int debug_stroke;
+	//from CIHCavas
+	BOOL isEnd;
+	CGContextRef ctx;
+	CGFloat cRed, cGreen, cBlue, cAlpha, wLine;
+	CGPoint *points;
+	NSUInteger pointIndex, alloced;
+	
+	NSString *fileNameP;
 }
 
 - (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSArray *)rad;

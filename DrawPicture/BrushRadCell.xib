@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
-		<int key="IBDocument.SystemTarget">1296</int>
+		<int key="IBDocument.SystemTarget">1280</int>
 		<string key="IBDocument.SystemVersion">12C60</string>
 		<string key="IBDocument.InterfaceBuilderVersion">2546</string>
 		<string key="IBDocument.AppKitVersion">1187.34</string>
@@ -43,7 +43,7 @@
 							<object class="IBUILabel" id="338784082">
 								<reference key="NSNextResponder" ref="100831398"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{20, 11}, {60, 21}}</string>
+								<string key="NSFrame">{{0, 11}, {60, 21}}</string>
 								<reference key="NSSuperview" ref="100831398"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="599234876"/>
@@ -77,7 +77,7 @@
 							<object class="IBUILabel" id="99350855">
 								<reference key="NSNextResponder" ref="100831398"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{281, 11}, {19, 21}}</string>
+								<string key="NSFrame">{{301, 11}, {19, 21}}</string>
 								<reference key="NSSuperview" ref="100831398"/>
 								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -97,7 +97,7 @@
 							<object class="IBUISlider" id="599234876">
 								<reference key="NSNextResponder" ref="100831398"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{102, 11}, {173, 23}}</string>
+								<string key="NSFrame">{{66, 11}, {229, 23}}</string>
 								<reference key="NSSuperview" ref="100831398"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="99350855"/>
@@ -106,8 +106,9 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentHorizontalAlignment">0</int>
 								<int key="IBUIContentVerticalAlignment">0</int>
-								<float key="IBUIValue">50</float>
-								<float key="IBUIMaxValue">100</float>
+								<float key="IBUIValue">25</float>
+								<float key="IBUIMinValue">4</float>
+								<float key="IBUIMaxValue">51</float>
 							</object>
 						</array>
 						<string key="NSFrameSize">{320, 43}</string>
@@ -277,10 +278,6 @@
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
-		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
-			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.iPhoneOS</string>
-			<real value="1296" key="NS.object.0"/>
-		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<string key="IBCocoaTouchPluginVersion">1497</string>

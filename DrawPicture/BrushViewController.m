@@ -49,20 +49,18 @@
 
 - (IBAction)howManyValueChanged:(UISlider *)sender {
 	[howMany setValue:(int)[howMany value]];
-	if((int)[howMany value] < 4)
-		[howMany setValue:4];
+	if((int)[howMany value] < 2)
+		[howMany setValue:2];
 	[howManyL setText:[NSString stringWithFormat:@"%2d",(int)[howMany value]]];
 }
 
 - (IBAction)howManyTouchEnd:(UISlider *)sender {
-	
 	[brushes removeAllObjects];
-	int k = (100/(int)[howMany value]);
+	int k = (50/(int)[howMany value]);
 	int n = [howMany value];
 	for (int i=0 ; i<(int)[howMany value]; i++) {
 		[brushes addObject:[DataBrush dataBrushWithName:[NSString stringWithFormat:@"order%2d",i+1] Value:k*(2*n-2*i-1)/2]];
 	}
-	
 	
 	[table beginUpdates];
 	[table deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
