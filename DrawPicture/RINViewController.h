@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <sqlite3.h>
+#import <opencv2/opencv.hpp>
 #import <MobileCoreServices/MobileCoreServices.h>
 
 @class RINhertzmann;

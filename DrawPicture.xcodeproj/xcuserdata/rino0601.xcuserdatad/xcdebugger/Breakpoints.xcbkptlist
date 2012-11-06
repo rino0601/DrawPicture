@@ -7,13 +7,13 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "DrawPicture/BrushRadCell.m"
-         timestampString = "373867196.202965"
+         filePath = "DrawPicture/RINhertzmann.m"
+         timestampString = "373892836.435565"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "63"
-         endingLineNumber = "63"
-         landmarkName = "-setDataBrush:"
+         startingLineNumber = "201"
+         endingLineNumber = "201"
+         landmarkName = "-drawRect:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

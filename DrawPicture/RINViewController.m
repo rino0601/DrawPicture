@@ -7,10 +7,12 @@
 //
 
 #import "RINViewController.h"
-#import "PreferenceViewController.h"
 #import "RINhertzmann.h"
-//#import "TestHertzmann.h"
 #import "RINAppDelegate.h"
+
+#import "UIImageCVArrConverter.h"
+
+#import "PreferenceViewController.h"
 
 
 @implementation RINViewController
@@ -28,6 +30,7 @@
 }
 
 - (void)useCamera {
+	[self refreshImageView];
 	if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
 		UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
 		[imagePicker setDelegate:self];
@@ -45,9 +48,10 @@
                               otherButtonTitles:nil];
         [alert show];
 	}
-}
+} 
 
 - (void)useCameraRoll {
+	[self refreshImageView];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]) {
 		UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
 		[imagePicker setDelegate:self];
@@ -57,70 +61,7 @@
         [self presentModalViewController:imagePicker animated:YES];
         newMedia = NO;
     }
-}
-
-- (void)rotateImageRight {
-	if([imageView image]) {
-		switch ([[imageView image] imageOrientation]) {
-			case UIImageOrientationDown:
-			case UIImageOrientationDownMirrored:
-				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationLeft]];
-				break;
-			case UIImageOrientationLeft:
-			case UIImageOrientationLeftMirrored:
-				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationUp]];
-				
-				break;
-			case UIImageOrientationRight:
-			case UIImageOrientationRightMirrored:
-				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationDown]];
-				break;
-			case UIImageOrientationUp:
-			case UIImageOrientationUpMirrored:
-				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationRight]];
-				break;
-		}
-	} else {
-		UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle: @"사진이 필요합니다."
-                              message: @"좌측하단의 카메라나 포토앨범 버튼을 눌러 사진을 불러주세요."\
-                              delegate: nil
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil];
-        [alert show];
-	}
-}
-
-- (void)rotateImageLeft {
-	if([imageView image]) {
-		switch ([[imageView image] imageOrientation]) {
-			case UIImageOrientationDown:
-			case UIImageOrientationDownMirrored:
-				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationRight]];
-				break;
-			case UIImageOrientationLeft:
-			case UIImageOrientationLeftMirrored:
-				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationDown]];
-				break;
-			case UIImageOrientationRight:
-			case UIImageOrientationRightMirrored:
-				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationUp]];
-				break;
-			case UIImageOrientationUp:
-			case UIImageOrientationUpMirrored:
-				[imageView setImage:[[UIImage alloc] initWithCGImage:[[imageView image] CGImage] scale:1.0 orientation:UIImageOrientationLeft]];
-				break;
-		}
-	} else {
-		UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle: @"사진이 필요합니다."
-                              message: @"좌측하단의 카메라나 포토앨범 버튼을 눌러 사진을 불러주세요."\
-                              delegate: nil
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil];
-        [alert show];
-	}
-}
+} 
 
 - (void)refreshImageView {
 	[imageView setImage:nil];
@@ -177,13 +118,18 @@
 	if(iCanvas!=nil){
 		[iCanvas removeFromSuperview];
 	}
-//	iCanvas = [[TestHertzmann alloc] initWithFrame:[[UIScreen mainScreen] bounds] Image:[imageView image] Radixes:Radixes];
-	iCanvas = [[RINhertzmann alloc] initWithFrame:[[UIScreen mainScreen] bounds] Image:[imageView image] Radixes:Radixes];
+	
+	[[self navigationController] setNavigationBarHidden:YES animated:NO];
+	[[self navigationController] setToolbarHidden:YES animated:NO];
+	iCanvas = [[RINhertzmann alloc] initWithFrame:[imageView frame] Image:[imageView image] Radixes:Radixes];
+	[[self navigationController] setNavigationBarHidden:NO animated:NO];
+	[[self navigationController] setToolbarHidden:NO animated:NO];
 	[[self view] addSubview:iCanvas];
 	[imageView setHidden:YES]; // create canvas
 	
 	// canvas인 iCanvas에게 Radixes를 전달하고 종료. 나머지 알고리즘은 iCanvas에서.
-	[iCanvas beginPaint];
+	[NSTimer scheduledTimerWithTimeInterval:0.0f target:iCanvas selector:@selector(beginPaint) userInfo:nil repeats:NO];
+//	[iCanvas beginPaint];
 }
 
 #pragma mark -
@@ -221,18 +167,10 @@
 	// objectAtIndex:2 is flexible space bar item;
 	
 	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:3] setTarget:self];
-	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:3] setAction:@selector(rotateImageLeft)];
+	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:3] setAction:@selector(refreshImageView)];
 	
 	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:4] setTarget:self];
-	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:4] setAction:@selector(rotateImageRight)];
-	
-	// objectAtIndex:5 is flexible space bar item;
-	
-	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:6] setTarget:self];
-	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:6] setAction:@selector(refreshImageView)];
-	
-	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:7] setTarget:self];
-	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:7] setAction:@selector(saveCurrentImageView)];
+	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:4] setAction:@selector(saveCurrentImageView)];
 	
 	
 	[self setToolbarItems:toolbarNib.items animated:YES];
@@ -270,10 +208,32 @@
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
     [self dismissModalViewControllerAnimated:YES];
     if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
-        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-		[imageView setImage:image];		
+        
+		[[self navigationController] setNavigationBarHidden:YES animated:NO];
+		[[self navigationController] setToolbarHidden:YES animated:NO];
+		
+		UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+		UIImage *scaledImage = [UIImageCVArrConverter scaleAndRotateImageBackCamera:image];
+		//ratio
+		CGRect bounds = CGRectMake( 0, 0, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height );
+		if ( [[UIScreen mainScreen] bounds].size.width/[[UIScreen mainScreen] bounds].size.height != [scaledImage size].width/[scaledImage size].height ) {
+			CGFloat ratio = [scaledImage size].width/[scaledImage size].height;
+			if ( ratio > 1 ) {
+				bounds.size.height = bounds.size.width / ratio;
+			}
+			else {
+				bounds.size.width = bounds.size.height * ratio;
+			}
+		}
+		[imageView setFrame:bounds];
+		[imageView setCenter:CGPointMake([[UIScreen mainScreen] bounds].size.width/2, [[UIScreen mainScreen] bounds].size.height/2)];
+		[imageView setImage:scaledImage];
+
+		[[self navigationController] setNavigationBarHidden:NO animated:NO];
+		[[self navigationController] setToolbarHidden:NO animated:NO];
+
         if (newMedia) {
-            UIImageWriteToSavedPhotosAlbum(image,self,@selector(image:finishedSavingWithError:contextInfo:),nil);
+            UIImageWriteToSavedPhotosAlbum(scaledImage,self,@selector(image:finishedSavingWithError:contextInfo:),nil);
 		}
     }
     else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie])

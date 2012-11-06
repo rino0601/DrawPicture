@@ -11,7 +11,6 @@
 		EA204ECF16247569000E3483 /* PreferenceViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA204ECD16247569000E3483 /* PreferenceViewController_iPhone.xib */; };
 		EA204ED11624759D000E3483 /* PreferenceViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA204ED01624759D000E3483 /* PreferenceViewController_iPad.xib */; };
 		EA4A7A121642632400DAE5A5 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4A7A111642632400DAE5A5 /* opencv2.framework */; };
-		EA4A7A1516426D2500DAE5A5 /* TestHertzmann.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4A7A1416426D2500DAE5A5 /* TestHertzmann.m */; };
 		EA4A7A1C164280C600DAE5A5 /* UIImageCVArrConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4A7A1B164280C600DAE5A5 /* UIImageCVArrConverter.m */; };
 		EA59FB5A1627E890000DCBCA /* icon72.png in Resources */ = {isa = PBXBuildFile; fileRef = EA59FB591627E890000DCBCA /* icon72.png */; };
 		EA59FB5C1627E8F4000DCBCA /* icon57.png in Resources */ = {isa = PBXBuildFile; fileRef = EA59FB5B1627E8F4000DCBCA /* icon57.png */; };
@@ -49,8 +48,6 @@
 		EA204ECD16247569000E3483 /* PreferenceViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceViewController_iPhone.xib; sourceTree = "<group>"; };
 		EA204ED01624759D000E3483 /* PreferenceViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceViewController_iPad.xib; sourceTree = "<group>"; };
 		EA4A7A111642632400DAE5A5 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = Library/Frameworks/opencv2.framework; sourceTree = DEVELOPER_DIR; };
-		EA4A7A1316426D2500DAE5A5 /* TestHertzmann.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestHertzmann.h; sourceTree = "<group>"; };
-		EA4A7A1416426D2500DAE5A5 /* TestHertzmann.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestHertzmann.m; sourceTree = "<group>"; };
 		EA4A7A1A164280C600DAE5A5 /* UIImageCVArrConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageCVArrConverter.h; sourceTree = "<group>"; };
 		EA4A7A1B164280C600DAE5A5 /* UIImageCVArrConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageCVArrConverter.m; sourceTree = "<group>"; };
 		EA59FB591627E890000DCBCA /* icon72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon72.png; path = ../icon72.png; sourceTree = "<group>"; };
@@ -280,8 +277,6 @@
 		EAD711DF16281A310068BA2C /* drawingAlgorithm */ = {
 			isa = PBXGroup;
 			children = (
-				EA4A7A1316426D2500DAE5A5 /* TestHertzmann.h */,
-				EA4A7A1416426D2500DAE5A5 /* TestHertzmann.m */,
 				EAD711E116281AA50068BA2C /* RINhertzmann.h */,
 				EAD711E216281AA50068BA2C /* RINhertzmann.m */,
 			);
@@ -393,7 +388,6 @@
 				EAEC53DE16256DFD00B3BDB9 /* BrushRadCell.m in Sources */,
 				EAB2A46E162671CA0092198A /* AboutMeViewController.m in Sources */,
 				EAD711E316281AA50068BA2C /* RINhertzmann.m in Sources */,
-				EA4A7A1516426D2500DAE5A5 /* TestHertzmann.m in Sources */,
 				EA4A7A1C164280C600DAE5A5 /* UIImageCVArrConverter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

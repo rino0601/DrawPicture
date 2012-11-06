@@ -15,12 +15,12 @@
 
 
 @interface RINhertzmann : UIView {
-	UIImage *src; //need? as input
 	UIImage *resultUIImage; //need as output
 	NSArray *radixes; // need!! as input
 	NSMutableArray *C_strok;
 	IplImage *dX, *dY;
-	IplImage *iplCanvas, *iplRefImg;
+	IplImage *iplCanvas, *iplRefImg; // iplRef잘 쓰면 변수 아낄 수 있다.
+	IplImage *src;
 	
 	//from CIHCavas
 	BOOL isEnd;
@@ -28,8 +28,6 @@
 	CGFloat cRed, cGreen, cBlue, cAlpha, wLine;
 	CGPoint *points;
 	NSUInteger pointIndex, alloced;
-	
-	NSString *fileNameP;
 }
 
 - (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSArray *)rad;

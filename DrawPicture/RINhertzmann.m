@@ -10,9 +10,9 @@
 #import "UIImageCVArrConverter.h"
 
 #define fg 					1
-#define T 					100
+#define T 					30
 #define MAX_STROKE_LENGTH	10
-#define MIN_STROKE_LENGTH	1
+#define MIN_STROKE_LENGTH	3
 #define CURVATURE_FILTER	0.5
 
 
@@ -143,33 +143,25 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-		src=image;
+		src=[UIImageCVArrConverter CreateIplImageFromUIImage:image];
 		radixes=rad;
 		resultUIImage=nil;
-		C_strok = [NSMutableArray array];
-		IplImage *dump = [UIImageCVArrConverter CreateIplImageFromUIImage:src];
-		IplImage *x1, *x2, *y1, *y2;
-		x1=RIN_sobel_edge(dump, 0, 1);	x2=RIN_sobel_edge(dump, 0, -1);	y1=RIN_sobel_edge(dump, 1, 1);	y2=RIN_sobel_edge(dump, 1, -1);
-		dX = cvCloneImage(dump);	dY = cvCloneImage(dump);
-		cvAdd(x1, x2, dX);	cvAdd(y1, y2, dY);
 		
 		cRed=cGreen=cBlue=0;
 		cAlpha=1;
 		wLine=[(NSNumber *)[radixes objectAtIndex:0] floatValue];
 		
 		CGColorSpaceRef cs=CGColorSpaceCreateDeviceRGB();
-		ctx=CGBitmapContextCreate(NULL, dump->width, dump->height, 8, 4*dump->width, cs, kCGImageAlphaPremultipliedFirst); 
+		ctx=CGBitmapContextCreate(NULL, src->width, src->height, 8, 4*src->width, cs, kCGImageAlphaPremultipliedFirst);
 		CGColorSpaceRelease(cs);
 		CGContextSetLineWidth(ctx, wLine);
 		CGContextSetLineCap(ctx, kCGLineCapRound);
 		CGContextSetRGBStrokeColor(ctx, cRed, cGreen, cBlue, cAlpha);
-		
+
 		points=(CGPoint *)malloc(sizeof(CGPoint)*(alloced=POINTSTORAGE_CAPACITY));
 		if(points==NULL)
 			self=nil;
 		pointIndex=0;
-		
-		fileNameP=@"layer0.png";
     }
     return self;
 }
@@ -178,11 +170,17 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 #pragma mark interface
 
 - (void)beginPaint {
+	// Initialization code	
+	C_strok = [NSMutableArray array];
+	IplImage *x1, *x2, *y1, *y2;
+	x1=RIN_sobel_edge(src, 0, 1);	x2=RIN_sobel_edge(src, 0, -1);	y1=RIN_sobel_edge(src, 1, 1);	y2=RIN_sobel_edge(src, 1, -1);
+	dX = cvCloneImage(src);	dY = cvCloneImage(src);
+	cvAdd(x1, x2, dX);	cvAdd(y1, y2, dY);
+		
 	//radixes are desc order
 	for (NSNumber *num in radixes) {//	for each brush radius Ri, from largest to smallest do
 		// apply Gaussian blur
-		// 가우시안 블러는, 애플 고유의 API가 월등하게 빠르긴하나, 쓰기가 어려운 것 같다. 후에 opencv로 바꿀 것.
-		
+			// 가우시안 블러는, 애플 고유의 API가 월등하게 빠르긴하나, 쓰기가 어려운 것 같다. 후에 opencv로 바꿀 것.
 		// paint a layer
 		[self paintLayer:src radix:[num floatValue]]; //no gausian blurr 일단 생략. 굳이 필요한것 같지도 않음.
 	}
@@ -190,17 +188,6 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 
 - (UIImage *)image {
 	resultUIImage = UIGraphicsGetImageFromImageContext(ctx);
-	NSString *fileName = @"layer";
-	NSFileManager *fm = [NSFileManager defaultManager];
-	int i=0;
-	while([fm fileExistsAtPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileNameP]]==YES){
-		fileNameP = [NSString stringWithFormat:@"layer%d.png",++i];
-	}
-	fileName = [NSString stringWithFormat:@"layer%d",i];
-	[UIImagePNGRepresentation(resultUIImage) writeToFile:[NSTemporaryDirectory() stringByAppendingPathComponent:[fileName stringByAppendingString:@".png"]]atomically:NO]; // alpha 값이 0으로 들어가서 아마 아무것도 안나올 가능성이 큼.
-//	[UIImageJPEGRepresentation(resultUIImage, 1.0) writeToFile:[NSTemporaryDirectory() stringByAppendingPathComponent:[fileName stringByAppendingString:@".jpg"]] atomically:NO]; // 실제로 어쩐지 알기 위함
-	// for science.
-	
 	return resultUIImage;
 }
 
@@ -263,12 +250,13 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	CGContextSetLineWidth(ctx, wLine);
 }
 
-- (void)paintLayer:(UIImage *)referenceImage radix:(CGFloat)R{
+- (void)paintLayer:(IplImage *)referenceImage radix:(CGFloat)R{
 //procedure paintLayer(canvas,referenceImage, R) {
 //	S := a new set of strokes, initially empty
 	NSMutableArray *S_strok=[NSMutableArray array]; // it is 2 dimention CGPoint array
 	iplCanvas = [UIImageCVArrConverter CreateIplImageFromUIImage:[self image]];
-	iplRefImg = [UIImageCVArrConverter CreateIplImageFromUIImage:referenceImage];
+//	iplRefImg = [UIImageCVArrConverter CreateIplImageFromUIImage:referenceImage];
+	iplRefImg = referenceImage;
 	// 두 점의 차이는, 직접 구하기로 했음. 이 부분에서 연산량이 2배가 되지만, 메모리가 모자라서 어쩔 수 없다.
 	
 	//	grid := fg R
@@ -393,7 +381,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	float lastDx=0, lastDy=0;
 	
 //	for i=1 to maxStrokeLength do {
-	for (int i = 1 ; i<MAX_STROKE_LENGTH; i++) {
+	for (int i = 1 ; i<=MAX_STROKE_LENGTH; i++) {
 		
 		float diffwc=0, diffws=0;
 		
@@ -412,7 +400,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		diffws = sqrtf(diffws);
 		
 		//		if (i > minStrokeLength and |refImage.color(x,y)-canvas.color(x,y)|< |refImage.color(x,y)-strokeColor|)
-		if(i > MIN_STROKE_LENGTH && diffwc < diffws )
+		if(i >= MIN_STROKE_LENGTH && diffwc < diffws )
 			return K;
 
 		//		// detect vanishing gradient

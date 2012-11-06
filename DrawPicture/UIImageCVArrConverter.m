@@ -10,8 +10,7 @@
 
 @implementation UIImageCVArrConverter
 
-+ (UIImage *)UIImageFromCVMat:(cv::Mat)cvMat withUIImage:(UIImage*)image;
-{
++ (UIImage *)UIImageFromCVMat:(cv::Mat)cvMat withUIImage:(UIImage*)image {
 	CGColorSpaceRef colorSpace = CGImageGetColorSpace( image.CGImage );
     CGFloat cols = image.size.width;
     CGFloat rows = image.size.height;
@@ -27,8 +26,7 @@
     return result;
 }
 
-+(UIImage *)UIImageFromCVMat:(cv::Mat)cvMat
-{
++ (UIImage *)UIImageFromCVMat:(cv::Mat)cvMat {
     NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize()*cvMat.total()];
     CGColorSpaceRef colorSpace;
     if ( cvMat.elemSize() == 1 ) {
@@ -46,8 +44,7 @@
     return finalImage;
 }
 
-+ (cv::Mat)cvMatFromUIImage:(UIImage *)image
-{
++ (cv::Mat)cvMatFromUIImage:(UIImage *)image {
     CGColorSpaceRef colorSpace = CGImageGetColorSpace( image.CGImage );
     CGFloat cols = image.size.width;
     CGFloat rows = image.size.height;
@@ -59,8 +56,7 @@
     return cvMat;
 }
 
-+ (cv::Mat)cvMatGrayFromUIImage:(UIImage *)image
-{
++ (cv::Mat)cvMatGrayFromUIImage:(UIImage *)image {
 	cv::Mat cvMat = [UIImageCVArrConverter cvMatFromUIImage:image];
 	cv::Mat grayMat;
     if ( cvMat.channels() == 1 ) {
@@ -73,8 +69,7 @@
 	return grayMat;
 }
 
-+ (UIImage *)scaleAndRotateImageBackCamera:(UIImage *)image
-{
++ (UIImage *)scaleAndRotateImageBackCamera:(UIImage *)image {
 	static int kMaxResolution = 640;
 	CGImageRef imgRef = image.CGImage;
 	CGFloat width = CGImageGetWidth( imgRef );
@@ -161,8 +156,7 @@
 	return returnImage;
 }
 
-+ (UIImage *)scaleAndRotateImageFrontCamera:(UIImage *)image
-{
++ (UIImage *)scaleAndRotateImageFrontCamera:(UIImage *)image {
 	static int kMaxResolution = 640;
 	CGImageRef imgRef = image.CGImage;
 	CGFloat width = CGImageGetWidth(imgRef);
@@ -242,6 +236,7 @@
 	UIGraphicsEndImageContext();
 	return returnImage;
 }
+
 + (IplImage *)CreateIplImageFromUIImage:(UIImage *)image {
 	CGImageRef imageRef = image.CGImage;
 	
