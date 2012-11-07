@@ -14,4 +14,6 @@
 	NSArray *sect3About;
 }
 
+// T, MIN,MAX,MOD_dot, MOD_stk,MOD_inst,isRand, updateInterval
+
 @end

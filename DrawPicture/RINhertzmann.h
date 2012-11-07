@@ -19,6 +19,12 @@ enum STATEQ {
 	POPDRWDOT = 3,
 	FINALSTAT = 4
 	};
+enum UPDATE_TERM {
+	EACH_DOT = 0,
+	EACH_STROKE = 1,
+	EACH_LAYER = 2,
+	EACH_DRAWING = 3,
+	};
 
 @interface RINhertzmann : UIView {
 	UIImage *resultUIImage; //need as output
@@ -35,14 +41,17 @@ enum STATEQ {
 	IplImage *src;
 	
 	//from CIHCavas
-	BOOL isEnd;
 	CGContextRef ctx;
 	CGFloat cRed, cGreen, cBlue, cAlpha, wLine;
 	CGPoint *points;
 	NSUInteger pointIndex, alloced;
+	
+	BOOL enableMdfyNEXT;
+	BOOL isRANDOM;
 }
 //for stateInterface
 @property (readonly) STATEQ NEXT;
+@property (readwrite) UPDATE_TERM mode;
 @property (readonly) BOOL callNEXT;
 
 - (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSArray *)rad;

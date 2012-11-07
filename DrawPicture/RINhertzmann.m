@@ -10,10 +10,10 @@
 #import "UIImageCVArrConverter.h"
 
 #define fg 					1
-#define T 					220
-#define MAX_STROKE_LENGTH	10
+#define T 					50
+#define MAX_STROKE_LENGTH	5
 #define MIN_STROKE_LENGTH	3
-#define CURVATURE_FILTER	0.5
+#define CURVATURE_FILTER	0.1
 #define BEZIER_INTERPOLATION_COEFFICIENT ((CGFloat)0.7)
 #define POINTSTORAGE_CAPACITY ((NSUInteger)1000)
 
@@ -131,7 +131,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	return [UIImage imageWithCGImage:CGBitmapContextCreateImage(context)];
 }
 @implementation RINhertzmann
-@synthesize NEXT,callNEXT;
+@synthesize NEXT,callNEXT,mode;
 - (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSMutableArray *)rad {
     self = [super initWithFrame:frame];
     if (self) {
@@ -150,11 +150,19 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		CGContextSetLineWidth(ctx, wLine);
 		CGContextSetLineCap(ctx, kCGLineCapRound);
 		CGContextSetRGBStrokeColor(ctx, cRed, cGreen, cBlue, cAlpha);
-
+		
+		CGFloat components[] = {1.0, 1.0, 1.0, 1.0};
+		CGContextSetFillColorWithColor(ctx, CGColorCreate(cs, components));
+		CGContextFillRect(ctx, CGRectMake(0, 0, src->width, src->height));
+		
 		points=(CGPoint *)malloc(sizeof(CGPoint)*(alloced=POINTSTORAGE_CAPACITY));
 		if(points==NULL)
 			self=nil;
 		pointIndex=0;
+		
+		enableMdfyNEXT = YES;
+		isRANDOM = NO;
+		mode=EACH_LAYER;
     }
     return self;
 }
@@ -173,39 +181,92 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	dX = cvCloneImage(src);	dY = cvCloneImage(src);
 	cvAdd(x1, x2, dX);	cvAdd(y1, y2, dY);
 	
+	if(mode==EACH_DRAWING){
+		enableMdfyNEXT = NO;
+		while([radixes count]!=0){
+			[self calcLayer];
+		}
+		
+		enableMdfyNEXT = YES;
+		
+		NEXT=FINALSTAT;
+		callNEXT=YES & enableMdfyNEXT;
+		return ;
+	}
+	
 	NEXT = CALCLAYER;
-	callNEXT=YES;
+	callNEXT=YES & enableMdfyNEXT;
 }
 - (void)calcLayer {
 	callNEXT=NO;
 	if([radixes count]==0){
 		NEXT=FINALSTAT;
-		callNEXT=YES;
+		callNEXT=YES & enableMdfyNEXT;
 		return ;
 	}
 	CGFloat R = [[radixes objectAtIndex:0] floatValue];
 	[radixes removeObjectAtIndex:0];
 	[self makeStrokeRef:src radix:R]; // 여기서 시간이 좀 걸림.
 	[self changeWidth:R]; // 굵기는 Layer에 따라 바뀌는거니 여기서 할당.
-
+	
+	if(mode==EACH_LAYER || mode == EACH_DRAWING) {
+		enableMdfyNEXT = NO;
+		while ([S_strok count]!=0) {
+			[self popStroke];
+		}
+		
+		enableMdfyNEXT = YES;
+		
+		NEXT = CALCLAYER;
+		callNEXT=YES & enableMdfyNEXT;
+		return ;
+	}
+	
 	NEXT=POPSTROKE;
-	callNEXT=YES;
+	callNEXT=YES & enableMdfyNEXT;
 }
 - (void)popStroke {
 	callNEXT=NO;
 	if([S_strok count]==0){
 		NEXT = CALCLAYER;
-		callNEXT=YES;
+		callNEXT=YES & enableMdfyNEXT;
 		return ;
 	}
-	int random = arc4random()%[S_strok count];
+	int random = isRANDOM ? arc4random()%[S_strok count] : 0;
 	dot_Que = [S_strok objectAtIndex:random];
 	[S_strok removeObjectAtIndex:random];
 	[self changeColor:[C_strok objectAtIndex:random]];
 	[C_strok removeObjectAtIndex:random];
 	
+	if(mode != EACH_DOT){ // update opt == each stroke or layer or instance
+		enableMdfyNEXT = NO;
+		while ([dot_Que count]!=0) {
+			[self popAndDrawPoint];
+		}
+		// final draw. equlto touchEnd.
+		if(pointIndex==1) {
+			// 검은점의 원인이라 생각되기 때문에 점한개짜리는 그냥 무시!
+			pointIndex=0;
+		} else if(pointIndex==2) {
+			CGContextBeginPath(ctx);
+			CGContextMoveToPoint(ctx, points[0].x, points[0].y);
+			CGContextAddLineToPoint(ctx, points[1].x, points[1].y);
+			CGContextStrokePath(ctx);
+			pointIndex=0;
+		} else if(pointIndex>=3)
+			interpolateBezierPathAtNode(ctx, points, &pointIndex, YES);
+		//*/
+		[self setNeedsDisplay];
+		
+		enableMdfyNEXT = YES;
+		
+		NEXT = POPSTROKE;
+		callNEXT=YES & enableMdfyNEXT;
+		return ;
+	}
+	// update opt == each dot
 	NEXT = POPDRWDOT;
-	callNEXT =YES;
+	callNEXT =YES & enableMdfyNEXT;
 }
 - (void)popAndDrawPoint {
 	callNEXT=NO;
@@ -213,8 +274,6 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		// final draw. equlto touchEnd.
 		if(pointIndex==1) {
 			// 검은점의 원인이라 생각되기 때문에 점한개짜리는 그냥 무시!
-//			CGPoint touch=points[0];
-//			CGContextFillEllipseInRect(ctx, CGRectMake(touch.x, touch.y, wLine, wLine));
 			pointIndex=0;
 		} else if(pointIndex==2) {
 			CGContextBeginPath(ctx);
@@ -228,7 +287,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		[self setNeedsDisplay];
 		
 		NEXT = POPSTROKE;
-		callNEXT=YES;
+		callNEXT=YES & enableMdfyNEXT;
 		return ;
 	}
 	theDot = [[dot_Que objectAtIndex:0] CGPointValue];
@@ -244,7 +303,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	}
 	
 	NEXT = POPDRWDOT;
-	callNEXT=YES;
+	callNEXT=YES & enableMdfyNEXT;
 }
 - (UIImage *)image {
 	resultUIImage = UIGraphicsGetImageFromImageContext(ctx);

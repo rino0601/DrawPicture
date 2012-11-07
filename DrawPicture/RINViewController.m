@@ -153,7 +153,7 @@
 	[iCanvas calcSobel];
 	framectrl = [NSTimer scheduledTimerWithTimeInterval:0.025f target:self selector:@selector(process) userInfo:nil repeats:YES];
 	
-	[notice dismissWithClickedButtonIndex:0 animated:YES];
+	[notice dismissWithClickedButtonIndex:0 animated:NO];
 }
 
 - (void)process {
