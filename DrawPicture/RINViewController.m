@@ -79,7 +79,8 @@
 							  cancelButtonTitle:@"OK"
 							  otherButtonTitles:nil];
 		[alert show];
-		UIImageWriteToSavedPhotosAlbum([iCanvas image],self,@selector(image:finishedSavingWithError:contextInfo:),nil);
+		UIImage *scaledImage = [UIImageCVArrConverter scaleAndRotateImageBackCamera:[iCanvas image]];
+		UIImageWriteToSavedPhotosAlbum(scaledImage,self,@selector(image:finishedSavingWithError:contextInfo:),nil);
 	} else {
 		UIAlertView *alert = [[UIAlertView alloc]
 							  initWithTitle: @"먼저 draw 해야 합니다."
@@ -128,12 +129,54 @@
 	[imageView setHidden:YES]; // create canvas
 	
 	// canvas인 iCanvas에게 Radixes를 전달하고 종료. 나머지 알고리즘은 iCanvas에서.
-	[NSTimer scheduledTimerWithTimeInterval:0.0f target:iCanvas selector:@selector(beginPaint) userInfo:nil repeats:NO];
-//	[iCanvas beginPaint];
+	
+	notice = [[UIAlertView alloc]
+			  initWithTitle: @"그리기가 시작되었습니다."
+			  message: @"그림파일을 분석중입니다. 잠시만 기다려 주세요."\
+			  delegate: nil
+			  cancelButtonTitle:@"이 팝업은 자동으로 사라집니다."
+			  otherButtonTitles:nil];
+	[notice show];
+	
+	[NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(canvasINIT) userInfo:nil repeats:NO];
+
+	[[self navigationController] setNavigationBarHidden:YES animated:YES];
+	[[self navigationController] setToolbarHidden:YES animated:YES];
 }
 
 #pragma mark -
 #pragma mark viewController
+
+- (void)canvasINIT {
+	OnDrawing=YES;
+	
+	[iCanvas calcSobel];
+	framectrl = [NSTimer scheduledTimerWithTimeInterval:0.025f target:self selector:@selector(process) userInfo:nil repeats:YES];
+	
+	[notice dismissWithClickedButtonIndex:0 animated:YES];
+}
+
+- (void)process {
+	if([iCanvas callNEXT]==NO) return;
+	switch ([iCanvas NEXT]) {
+		case CALCLAYER:
+			[iCanvas calcLayer];
+			return ;
+		case POPSTROKE:
+			[iCanvas popStroke];
+			return ;
+		case POPDRWDOT:
+			[iCanvas popAndDrawPoint];
+			return ;
+		case FINALSTAT:
+			[framectrl invalidate];
+			OnDrawing=NO;
+			[[self navigationController] setNavigationBarHidden:NO animated:YES];
+			[[self navigationController] setToolbarHidden:NO animated:YES];
+			return ;
+	}
+	return ;
+}
 
 - (void)viewDidAppear:(BOOL)animated {
 	[[self navigationController] setNavigationBarHidden:NO animated:YES];
@@ -172,8 +215,9 @@
 	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:4] setTarget:self];
 	[(UIBarButtonItem *)[toolbarNib.items objectAtIndex:4] setAction:@selector(saveCurrentImageView)];
 	
-	
 	[self setToolbarItems:toolbarNib.items animated:YES];
+	
+	OnDrawing = NO;
 }
 
 - (void)viewDidUnload {
@@ -193,6 +237,7 @@
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	if(OnDrawing) return;
 	if([[self navigationController] isNavigationBarHidden]) {
 		[[self navigationController] setNavigationBarHidden:NO animated:YES];
 		[[self navigationController] setToolbarHidden:NO animated:YES];

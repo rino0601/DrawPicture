@@ -10,12 +10,10 @@
 #import "UIImageCVArrConverter.h"
 
 #define fg 					1
-#define T 					30
+#define T 					220
 #define MAX_STROKE_LENGTH	10
 #define MIN_STROKE_LENGTH	3
 #define CURVATURE_FILTER	0.5
-
-
 #define BEZIER_INTERPOLATION_COEFFICIENT ((CGFloat)0.7)
 #define POINTSTORAGE_CAPACITY ((NSUInteger)1000)
 
@@ -24,11 +22,9 @@ static CGFloat dist(CGPoint p1, CGPoint p2) {
 	
 	return (CGFloat)sqrt((dx*dx)+(dy*dy));
 }
-
 static CGPoint mid(CGPoint p1, CGPoint p2) {
 	return CGPointMake((p1.x+p2.x)/2.0, (p1.y+p2.y)/2.0);
 }
-
 static void interpolateBezierPathAtNode(CGContextRef ctx, CGPoint *points, NSUInteger  *pointCount, BOOL isEnd) {
 	if(ctx==NULL)
 		return;
@@ -85,7 +81,6 @@ static void interpolateBezierPathAtNode(CGContextRef ctx, CGPoint *points, NSUIn
 		*pointCount=0;
 	}
 }
-
 IplImage *RIN_sobel_edge(IplImage *src_image, int mode, int dix) {
 	int mask_height, mask_width, mask_vector;
 	double vertical_var, horizontal_var, ret_var;
@@ -126,7 +121,6 @@ IplImage *RIN_sobel_edge(IplImage *src_image, int mode, int dix) {
 	}
 	return dst_image;
 }
-
 UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	/*CGImageRef imgRef = CGBitmapContextCreateImage(context);
 	 UIImage* img = [UIImage imageWithCGImage:imgRef];
@@ -136,10 +130,9 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	 */
 	return [UIImage imageWithCGImage:CGBitmapContextCreateImage(context)];
 }
-
 @implementation RINhertzmann
-
-- (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSArray *)rad {
+@synthesize NEXT,callNEXT;
+- (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSMutableArray *)rad {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
@@ -152,7 +145,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		wLine=[(NSNumber *)[radixes objectAtIndex:0] floatValue];
 		
 		CGColorSpaceRef cs=CGColorSpaceCreateDeviceRGB();
-		ctx=CGBitmapContextCreate(NULL, src->width, src->height, 8, 4*src->width, cs, kCGImageAlphaPremultipliedFirst);
+		ctx=CGBitmapContextCreate(NULL, src->width, src->height, 8, 4*src->width, cs, kCGImageAlphaPremultipliedLast);//kCGImageAlphaPremultipliedFirst
 		CGColorSpaceRelease(cs);
 		CGContextSetLineWidth(ctx, wLine);
 		CGContextSetLineCap(ctx, kCGLineCapRound);
@@ -165,143 +158,146 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
     }
     return self;
 }
-
 #pragma mark -
 #pragma mark interface
-
-- (void)beginPaint {
-	// Initialization code	
+- (void)calcSobel {
+	callNEXT=NO;
+	
+	// Initialization code
 	C_strok = [NSMutableArray array];
+	S_strok = [NSMutableArray array];
+	dot_Que = [NSMutableArray array];
+	
 	IplImage *x1, *x2, *y1, *y2;
 	x1=RIN_sobel_edge(src, 0, 1);	x2=RIN_sobel_edge(src, 0, -1);	y1=RIN_sobel_edge(src, 1, 1);	y2=RIN_sobel_edge(src, 1, -1);
 	dX = cvCloneImage(src);	dY = cvCloneImage(src);
 	cvAdd(x1, x2, dX);	cvAdd(y1, y2, dY);
-		
-	//radixes are desc order
-	for (NSNumber *num in radixes) {//	for each brush radius Ri, from largest to smallest do
-		// apply Gaussian blur
-			// 가우시안 블러는, 애플 고유의 API가 월등하게 빠르긴하나, 쓰기가 어려운 것 같다. 후에 opencv로 바꿀 것.
-		// paint a layer
-		[self paintLayer:src radix:[num floatValue]]; //no gausian blurr 일단 생략. 굳이 필요한것 같지도 않음.
-	}
+	
+	NEXT = CALCLAYER;
+	callNEXT=YES;
 }
+- (void)calcLayer {
+	callNEXT=NO;
+	if([radixes count]==0){
+		NEXT=FINALSTAT;
+		callNEXT=YES;
+		return ;
+	}
+	CGFloat R = [[radixes objectAtIndex:0] floatValue];
+	[radixes removeObjectAtIndex:0];
+	[self makeStrokeRef:src radix:R]; // 여기서 시간이 좀 걸림.
+	[self changeWidth:R]; // 굵기는 Layer에 따라 바뀌는거니 여기서 할당.
 
+	NEXT=POPSTROKE;
+	callNEXT=YES;
+}
+- (void)popStroke {
+	callNEXT=NO;
+	if([S_strok count]==0){
+		NEXT = CALCLAYER;
+		callNEXT=YES;
+		return ;
+	}
+	int random = arc4random()%[S_strok count];
+	dot_Que = [S_strok objectAtIndex:random];
+	[S_strok removeObjectAtIndex:random];
+	[self changeColor:[C_strok objectAtIndex:random]];
+	[C_strok removeObjectAtIndex:random];
+	
+	NEXT = POPDRWDOT;
+	callNEXT =YES;
+}
+- (void)popAndDrawPoint {
+	callNEXT=NO;
+	if([dot_Que count]==0){
+		// final draw. equlto touchEnd.
+		if(pointIndex==1) {
+			// 검은점의 원인이라 생각되기 때문에 점한개짜리는 그냥 무시!
+//			CGPoint touch=points[0];
+//			CGContextFillEllipseInRect(ctx, CGRectMake(touch.x, touch.y, wLine, wLine));
+			pointIndex=0;
+		} else if(pointIndex==2) {
+			CGContextBeginPath(ctx);
+			CGContextMoveToPoint(ctx, points[0].x, points[0].y);
+			CGContextAddLineToPoint(ctx, points[1].x, points[1].y);
+			CGContextStrokePath(ctx);
+			pointIndex=0;
+		} else if(pointIndex>=3)
+			interpolateBezierPathAtNode(ctx, points, &pointIndex, YES);
+		//*/
+		[self setNeedsDisplay];
+		
+		NEXT = POPSTROKE;
+		callNEXT=YES;
+		return ;
+	}
+	theDot = [[dot_Que objectAtIndex:0] CGPointValue];
+	[dot_Que removeObjectAtIndex:0];
+
+	// drawing method
+	points[pointIndex++]=theDot;
+	if(pointIndex==alloced)
+		points=(CGPoint *)realloc(points, (alloced+=POINTSTORAGE_CAPACITY));
+	if(pointIndex>3) {
+		interpolateBezierPathAtNode(ctx, points, &pointIndex, NO);
+		[self setNeedsDisplay];
+	}
+	
+	NEXT = POPDRWDOT;
+	callNEXT=YES;
+}
 - (UIImage *)image {
 	resultUIImage = UIGraphicsGetImageFromImageContext(ctx);
 	return resultUIImage;
 }
-
 #pragma mark -
 #pragma mark innerMethod
-
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-
 - (void)drawRect:(CGRect)rect {
+	// Only override drawRect: if you perform custom drawing.
+	// An empty implementation adversely affects performance during animation.
 	CGImageRef i=CGBitmapContextCreateImage(ctx);
 	CGContextDrawImage(UIGraphicsGetCurrentContext(), [self bounds], i);
 	CGImageRelease(i);
 }
-
-- (void)paint:(NSMutableArray *)stroke { // 일단 그려지긴 하겠다...
-	isEnd=NO;
-	//touch begin
-	
-	for(NSValue *dot in stroke) {
-		points[pointIndex++]=[dot CGPointValue];
-		if(pointIndex==alloced)
-			points=(CGPoint *)realloc(points, (alloced+=POINTSTORAGE_CAPACITY));
-		if(pointIndex>3) {
-			interpolateBezierPathAtNode(ctx, points, &pointIndex, NO);
-			[self setNeedsDisplay];
-		}
-	}// touch moved
-	
-	if(pointIndex==1) {
-		CGPoint touch=points[0];
-		CGContextFillEllipseInRect(ctx, CGRectMake(touch.x, touch.y, wLine, wLine));
-		pointIndex=0;
-	} else if(pointIndex==2) {
-		CGContextBeginPath(ctx);
-		CGContextMoveToPoint(ctx, points[0].x, points[0].y);
-		CGContextAddLineToPoint(ctx, points[1].x, points[1].y);
-		CGContextStrokePath(ctx);
-		pointIndex=0;
-	} else if(pointIndex>=3)
-		interpolateBezierPathAtNode(ctx, points, &pointIndex, YES);
-	//*/
-	[self setNeedsDisplay];
-	
-	isEnd=YES;
-}
-
-- (void)changeColor:(UIColor *)color {
-	CGFloat tRed=0.0, tGreen=0.0, tBlue=0.0, tAlpha=1.0;
-	[color getRed:&tRed green:&tGreen blue:&tBlue alpha:&tAlpha];
-	cRed=tRed;
-	cGreen=tGreen;
-	cBlue=tBlue;
-	cAlpha=tAlpha;
-	CGContextSetRGBStrokeColor(ctx, cRed, cGreen, cBlue, cAlpha);
-}
-
-- (void)changeWidth:(CGFloat)thickness {
-	wLine=thickness;
-	CGContextSetLineWidth(ctx, wLine);
-}
-
-- (void)paintLayer:(IplImage *)referenceImage radix:(CGFloat)R{
-//procedure paintLayer(canvas,referenceImage, R) {
-//	S := a new set of strokes, initially empty
-	NSMutableArray *S_strok=[NSMutableArray array]; // it is 2 dimention CGPoint array
-	iplCanvas = [UIImageCVArrConverter CreateIplImageFromUIImage:[self image]];
-//	iplRefImg = [UIImageCVArrConverter CreateIplImageFromUIImage:referenceImage];
+- (void)makeStrokeRef:(IplImage *)referenceImage radix:(CGFloat)R{
+	//procedure paintLayer(canvas,referenceImage, R) {
+	//	S := a new set of strokes, initially empty
+	iplCanvas = [UIImageCVArrConverter CreateIplImageFromUIImage:[self image]];  // 고치고 싶다.
+	//	iplRefImg = [UIImageCVArrConverter CreateIplImageFromUIImage:referenceImage];
 	iplRefImg = referenceImage;
 	// 두 점의 차이는, 직접 구하기로 했음. 이 부분에서 연산량이 2배가 되지만, 메모리가 모자라서 어쩔 수 없다.
 	
+	if([S_strok count]!=0 && [C_strok count]!=0) NSLog(@"doh!");
+	
 	//	grid := fg R
 	CGFloat grid = fg*R;
-
-//	for x=0 to imageWidth stepsize grid do
+	
+	//	for x=0 to imageWidth stepsize grid do
 	for(int h = 0 ; h < iplCanvas->height ; h+=grid) {
-//		for y=0 to imageHeight stepsize grid do
+		//		for y=0 to imageHeight stepsize grid do
 		for(int w = 0 ; w < iplCanvas->width ; w+= grid) {
-//			// sum the error near (w,h) w:x h:y
-//			M := the region (x-grid/2..x+grid/2,
-//							 y-grid/2..y+grid/2)
-//			areaError := ∑ D / grid2 i , j∈M i,j
+			//			// sum the error near (w,h) w:x h:y
+			//			M := the region (x-grid/2..x+grid/2,
+			//							 y-grid/2..y+grid/2)
+			//			areaError := ∑ D / grid2 i , j∈M i,j
 			if(grid==0)// 0일 리는 없지만.
 				grid=0.0001f;
 			
-			int areaError = [self getAreaError:iplCanvas reference:iplRefImg x:w y:h grid:grid]/(grid*grid);// x,y as a start point
+			int areaError = [self getAreaError:iplCanvas x:w y:h grid:grid]/(grid*grid);// x,y as a start point
 			
-//			if (areaError > T) then 
+			//			if (areaError > T) then
 			if (areaError > T) {
 				// find the largest error point
 				//				(x1,y1) := arg max i, j ∈M Di,j
 				//				s :=makeStroke(R,x1,y1,referenceImage)
 				//				add s to S }
-				CGPoint arg = [self getAreaMax:iplCanvas reference:iplRefImg x:w y:h grid:grid];
+				CGPoint arg = [self getAreaMax:iplCanvas x:w y:h grid:grid];
 				[S_strok addObject:[self makeStroke:R point:arg]];
 			}
 		}
 	}
-//	paint all strokes in S on the canvas, in random order
-	//throw S_strok to drawing Method
-	[self changeWidth:R];// 혹은 grid.
-	while([S_strok count]!=0){
-		[self changeColor:[C_strok objectAtIndex:0]];
-		[C_strok removeObjectAtIndex:0];
-		
-		[self paint:[S_strok objectAtIndex:0]];
-		[S_strok removeObjectAtIndex:0];
-		
-		if([S_strok count]!=[C_strok count])
-			NSLog(@"color & route are not same stroke");
-	}
 }
-
-- (int)getAreaError:(IplImage *)canvas reference:(IplImage *)refImg x:(int)x y:(int)y grid:(CGFloat)grid { // int?
+- (int)getAreaError:(IplImage *)canvas x:(int)x y:(int)y grid:(CGFloat)grid { // int?
 	int areaError=0;
 	for (int i =y-grid/2 ; i < y+grid/2 ; i++) {
 		if(i<0)	continue;
@@ -312,7 +308,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 			CvScalar can, ref;
 			
 			can = cvGet2D(canvas, i, j); //(256,320)
-			ref = cvGet2D(refImg, i, j);
+			ref = cvGet2D(iplRefImg, i, j);
 			
 			float diff=0;
 			diff+= (can.val[0]-ref.val[0])*(can.val[0]-ref.val[0]);
@@ -325,8 +321,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	}
 	return areaError;
 }
-
-- (CGPoint)getAreaMax:(IplImage *)canvas reference:(IplImage *)refImg x:(int)x y:(int)y grid:(CGFloat)grid {
+- (CGPoint)getAreaMax:(IplImage *)canvas x:(int)x y:(int)y grid:(CGFloat)grid {
 	float max=0;
 	CGPoint point;
 	for (int i =y-grid/2 ; i < y+grid/2 ; i++) {
@@ -338,7 +333,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 			
 			CvScalar can, ref;
 			can = cvGet2D(canvas, i, j);
-			ref = cvGet2D(refImg, i, j);
+			ref = cvGet2D(iplRefImg, i, j);
 			
 			float diff=0;
 			diff+= (can.val[0]-ref.val[0])*(can.val[0]-ref.val[0]);
@@ -355,7 +350,6 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	}
 	return point;
 }
-
 - (NSArray *)makeStroke:(CGFloat)R point:(CGPoint)pt {//retrun CGPoint array
 	// 여기 코드 줄여야 한다.
 //function makeSplineStroke(x0,y0,R,refImage) {
@@ -442,18 +436,39 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		
 		//		(x,y) := (x+R*dx, y+R*dy)
 		xy.x = xy.x + R*dx;		xy.y = xy.y + R*dy;
-		if(xy.x < 0)	xy.x = 0;
-		if(xy.y < 0)	xy.y = 0;
-		if(xy.x >= iplCanvas->width)	xy.x = iplCanvas->width-1;
-		if(xy.y >= iplCanvas->height)	xy.y = iplCanvas->height-1;
+		
+		BOOL boundTouch = NO;
+		if(xy.x < 0)
+			{xy.x = 0;	boundTouch=YES;}
+		if(xy.y < 0)
+			{xy.y = 0;	boundTouch=YES;}
+		if(xy.x >= iplCanvas->width)
+			{xy.x = iplCanvas->width-1;		boundTouch=YES;}
+		if(xy.y >= iplCanvas->height)
+			{xy.y = iplCanvas->height-1;	boundTouch=YES;}
 		//		(lastDx,lastDy) := (dx,dy)
 		lastDx = dx;			lastDy = dy;
 		
 		//		add the point (x,y) to K
 		[K addObject:[NSValue valueWithCGPoint:xy]];
+		if(boundTouch)
+			return K;
 	}
 //	return K
 	return K;
 }
-	
+- (void)changeColor:(UIColor *)color {
+	CGFloat tRed=0.0, tGreen=0.0, tBlue=0.0, tAlpha=1.0;
+	[color getRed:&tRed green:&tGreen blue:&tBlue alpha:&tAlpha];
+	cRed=tRed;
+	cGreen=tGreen;
+	cBlue=tBlue;
+	cAlpha=tAlpha;
+	CGContextSetRGBStrokeColor(ctx, cRed, cGreen, cBlue, cAlpha);
+}
+- (void)changeWidth:(CGFloat)thickness {
+	wLine=thickness;
+	CGContextSetLineWidth(ctx, wLine);
+}
+
 @end

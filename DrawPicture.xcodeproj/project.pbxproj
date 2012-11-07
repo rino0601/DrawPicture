@@ -25,8 +25,6 @@
 		EA6CF3FD16246E4B00E542E8 /* RINViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6CF3FC16246E4B00E542E8 /* RINViewController.m */; };
 		EA6CF40016246E4B00E542E8 /* RINViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA6CF3FE16246E4B00E542E8 /* RINViewController_iPhone.xib */; };
 		EA6CF40316246E4B00E542E8 /* RINViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA6CF40116246E4B00E542E8 /* RINViewController_iPad.xib */; };
-		EA742F121643A63D00E2E94F /* t1.PNG in Resources */ = {isa = PBXBuildFile; fileRef = EA742F101643A63D00E2E94F /* t1.PNG */; };
-		EA742F131643A63D00E2E94F /* t2.PNG in Resources */ = {isa = PBXBuildFile; fileRef = EA742F111643A63D00E2E94F /* t2.PNG */; };
 		EAB2A46E162671CA0092198A /* AboutMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB2A46C162671CA0092198A /* AboutMeViewController.m */; };
 		EAB2A46F162671CA0092198A /* AboutMeViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAB2A46D162671CA0092198A /* AboutMeViewController_iPhone.xib */; };
 		EAB2A472162671EC0092198A /* AboutMeViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAB2A471162671EC0092198A /* AboutMeViewController_iPad.xib */; };
@@ -68,8 +66,6 @@
 		EA6CF3FC16246E4B00E542E8 /* RINViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RINViewController.m; sourceTree = "<group>"; };
 		EA6CF3FF16246E4B00E542E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RINViewController_iPhone.xib; sourceTree = "<group>"; };
 		EA6CF40216246E4B00E542E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RINViewController_iPad.xib; sourceTree = "<group>"; };
-		EA742F101643A63D00E2E94F /* t1.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = t1.PNG; sourceTree = "<group>"; };
-		EA742F111643A63D00E2E94F /* t2.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = t2.PNG; sourceTree = "<group>"; };
 		EAB2A46B162671CA0092198A /* AboutMeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutMeViewController.h; sourceTree = "<group>"; };
 		EAB2A46C162671CA0092198A /* AboutMeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutMeViewController.m; sourceTree = "<group>"; };
 		EAB2A46D162671CA0092198A /* AboutMeViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutMeViewController_iPhone.xib; sourceTree = "<group>"; };
@@ -181,8 +177,6 @@
 		EA59FB581627E820000DCBCA /* image */ = {
 			isa = PBXGroup;
 			children = (
-				EA742F101643A63D00E2E94F /* t1.PNG */,
-				EA742F111643A63D00E2E94F /* t2.PNG */,
 				EA59FB5F1627E8FE000DCBCA /* icon144.png */,
 				EA59FB5D1627E8FA000DCBCA /* icon114.png */,
 				EA59FB5B1627E8F4000DCBCA /* icon57.png */,
@@ -368,8 +362,6 @@
 				EA59FB601627E8FE000DCBCA /* icon144.png in Resources */,
 				EAE2EBD61627F94900D984C9 /* BrushRadCell.xib in Resources */,
 				EAB5E919163F86EF00F47725 /* defaultSetting.sqlite in Resources */,
-				EA742F121643A63D00E2E94F /* t1.PNG in Resources */,
-				EA742F131643A63D00E2E94F /* t2.PNG in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,13 +13,25 @@
 
 @end
 
+enum STATEQ {
+	CALCLAYER = 1,
+	POPSTROKE = 2,
+	POPDRWDOT = 3,
+	FINALSTAT = 4
+	};
 
 @interface RINhertzmann : UIView {
 	UIImage *resultUIImage; //need as output
-	NSArray *radixes; // need!! as input
+	NSMutableArray *radixes; // need!! as input
+	NSMutableArray *S_strok;
 	NSMutableArray *C_strok;
+	
+	NSMutableArray *dot_Que;
+	CGPoint theDot;
+	
 	IplImage *dX, *dY;
-	IplImage *iplCanvas, *iplRefImg; // iplRef잘 쓰면 변수 아낄 수 있다.
+	IplImage *iplCanvas;
+	IplImage *iplRefImg;
 	IplImage *src;
 	
 	//from CIHCavas
@@ -29,9 +41,16 @@
 	CGPoint *points;
 	NSUInteger pointIndex, alloced;
 }
+//for stateInterface
+@property (readonly) STATEQ NEXT;
+@property (readonly) BOOL callNEXT;
 
 - (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSArray *)rad;
-- (void)beginPaint;
 - (UIImage *)image;
+- (void)calcSobel;
+- (void)calcLayer;
+- (void)popStroke;
+- (void)popAndDrawPoint;
+
 
 @end

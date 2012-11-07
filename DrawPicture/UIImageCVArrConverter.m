@@ -257,8 +257,7 @@
 	
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	NSData *data = [NSData dataWithBytes:image->imageData length:image->imageSize];
-	//	CGDataProviderRef provider = CGDataProviderCreateWithCFData((CFDataRef)data); this is the problem.
-	CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
+	CGDataProviderRef provider = CGDataProviderCreateWithCFData((CFDataRef)CFBridgingRetain(data)); //this is the problem.
 	CGImageRef imageRef = CGImageCreate(image->width, image->height,
 										image->depth, image->depth * image->nChannels, image->widthStep,
 										colorSpace, kCGImageAlphaPremultipliedLast|kCGBitmapByteOrderDefault,
