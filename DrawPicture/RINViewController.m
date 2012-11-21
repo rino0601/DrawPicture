@@ -104,6 +104,18 @@
 		return ;
 	}
 	
+//	/// 라플라스 테스트.
+//	IplImage *src = [UIImageCVArrConverter CreateIplImageFromUIImage:[imageView image]];
+//	IplImage *dst = cvCloneImage(src);
+//	cvLaplace(src, dst);
+//	cv::Mat cvt(dst);
+//	[imageView setImage:[UIImageCVArrConverter UIImageFromCVMat:cvt]];
+//	return ;
+	
+	
+	
+	
+	
 	// paint the canvas
 	NSMutableArray *Radixes = [NSMutableArray array];
 	RINAppDelegate* delegate=(RINAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -151,7 +163,8 @@
 	OnDrawing=YES;
 	
 	[iCanvas calcSobel];
-	framectrl = [NSTimer scheduledTimerWithTimeInterval:0.025f target:self selector:@selector(process) userInfo:nil repeats:YES];
+//	[iCanvas calcLaplace];
+	framectrl = [NSTimer scheduledTimerWithTimeInterval:0.0f target:self selector:@selector(process) userInfo:nil repeats:YES];
 	
 	[notice dismissWithClickedButtonIndex:0 animated:NO];
 }
@@ -237,7 +250,7 @@
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-	if(OnDrawing) return;
+//	if(OnDrawing) return;
 	if([[self navigationController] isNavigationBarHidden]) {
 		[[self navigationController] setNavigationBarHidden:NO animated:YES];
 		[[self navigationController] setToolbarHidden:NO animated:YES];

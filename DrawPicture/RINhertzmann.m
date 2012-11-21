@@ -8,12 +8,13 @@
 
 #import "RINhertzmann.h"
 #import "UIImageCVArrConverter.h"
+#import "RINAppDelegate.h"
 
 #define fg 					1
 #define T 					50
 #define MAX_STROKE_LENGTH	5
 #define MIN_STROKE_LENGTH	3
-#define CURVATURE_FILTER	0.1
+#define CURVATURE_FILTER	0.95
 #define BEZIER_INTERPOLATION_COEFFICIENT ((CGFloat)0.7)
 #define POINTSTORAGE_CAPACITY ((NSUInteger)1000)
 
@@ -83,7 +84,7 @@ static void interpolateBezierPathAtNode(CGContextRef ctx, CGPoint *points, NSUIn
 }
 IplImage *RIN_sobel_edge(IplImage *src_image, int mode, int dix) {
 	int mask_height, mask_width, mask_vector;
-	double vertical_var, horizontal_var, ret_var;
+	double vertical_var, horizontal_var;
 	
 	int height = src_image->height;
 	int width = src_image->width;
@@ -108,13 +109,14 @@ IplImage *RIN_sobel_edge(IplImage *src_image, int mode, int dix) {
 			}
 			//fabs 생략
 			//근데 음수 없다.... 왜?????
-			ret_var=vertical_var+horizontal_var;
 			CvScalar value;
 			value.val[3]=255.0;
 			switch (mode) {
 				case 0:	value.val[2]=value.val[1]=value.val[0]=vertical_var;	break;
 				case 1:	value.val[2]=value.val[1]=value.val[0]=horizontal_var;	break;
-				case 2: value.val[2]=value.val[1]=value.val[0]=ret_var;			break;
+				default:
+					NSLog(@"invalid mode");
+					return NULL;
 			}
 			cvSet2D(dst_image, i+(mask_height-1)/2, j+(mask_width-1)/2, value);
 		}
@@ -161,13 +163,72 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		pointIndex=0;
 		
 		enableMdfyNEXT = YES;
-		isRANDOM = NO;
-		mode=EACH_LAYER;
+		
+		
+		RINAppDelegate* delegate=(RINAppDelegate *)[[UIApplication sharedApplication] delegate];
+		sqlite3 *dbo = [delegate dbo];
+		sqlite3_stmt *localizer=NULL;
+		
+		sqlite3_prepare_v2(dbo, [@"SELECT value FROM DRAWRULL WHERE key='each'" UTF8String], -1, &localizer, NULL);
+		if(sqlite3_step(localizer)==SQLITE_ROW){
+			int kval=sqlite3_column_int(localizer, 0);
+			switch (kval) {
+				case 0: mode = EACH_DRAWING; break;
+				case 1: mode = EACH_LAYER; break;
+				case 2: mode = EACH_STROKE; break;
+				case 3: mode = EACH_DOT; break;
+				default:break;
+			}
+		}
+		sqlite3_finalize(localizer);//EACH_@ setting
+		
+		sqlite3_prepare_v2(dbo, [@"SELECT value FROM DRAWRULL WHERE key='random'" UTF8String], -1, &localizer, NULL);
+		if(sqlite3_step(localizer)==SQLITE_ROW){
+			int kval=sqlite3_column_int(localizer, 0);
+			if(kval==0)
+				isRANDOM = NO;
+			else
+				isRANDOM = YES;
+		}
+		sqlite3_finalize(localizer);//EACH_@ setting
     }
     return self;
 }
 #pragma mark -
 #pragma mark interface
+- (void)calcLaplace {
+	callNEXT=NO;
+	
+	// Initialization code
+	C_strok = [NSMutableArray array];
+	S_strok = [NSMutableArray array];
+	dot_Que = [NSMutableArray array];
+	
+	IplImage *x, *y;
+	x = cvCloneImage(src);
+	y = cvCloneImage(src);
+	cvLaplace(src, x);
+	cvLaplace(src, y);
+	dX = x; dY = y;
+	
+	
+	if(mode==EACH_DRAWING){
+		enableMdfyNEXT = NO;
+		while([radixes count]!=0){
+			[self calcLayer];
+		}
+		
+		enableMdfyNEXT = YES;
+		
+		NEXT=FINALSTAT;
+		callNEXT=YES & enableMdfyNEXT;
+		return ;
+	}
+	
+	NEXT = CALCLAYER;
+	callNEXT=YES & enableMdfyNEXT;
+}
+
 - (void)calcSobel {
 	callNEXT=NO;
 	
@@ -179,7 +240,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	IplImage *x1, *x2, *y1, *y2;
 	x1=RIN_sobel_edge(src, 0, 1);	x2=RIN_sobel_edge(src, 0, -1);	y1=RIN_sobel_edge(src, 1, 1);	y2=RIN_sobel_edge(src, 1, -1);
 	dX = cvCloneImage(src);	dY = cvCloneImage(src);
-	cvAdd(x1, x2, dX);	cvAdd(y1, y2, dY);
+	cvAdd(x1, x2, dX);	cvAdd(y1, y2, dY); // 이거 필요 없을지도.
 	
 	if(mode==EACH_DRAWING){
 		enableMdfyNEXT = NO;
@@ -221,11 +282,12 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		callNEXT=YES & enableMdfyNEXT;
 		return ;
 	}
-	
+	// EACH_STROKE || EACH_DOT
 	NEXT=POPSTROKE;
 	callNEXT=YES & enableMdfyNEXT;
 }
 - (void)popStroke {
+	static int i = 0;
 	callNEXT=NO;
 	if([S_strok count]==0){
 		NEXT = CALCLAYER;
@@ -264,7 +326,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		callNEXT=YES & enableMdfyNEXT;
 		return ;
 	}
-	// update opt == each dot
+	// update opt == EACH_DOT
 	NEXT = POPDRWDOT;
 	callNEXT =YES & enableMdfyNEXT;
 }
@@ -329,7 +391,8 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	if([S_strok count]!=0 && [C_strok count]!=0) NSLog(@"doh!");
 	
 	//	grid := fg R
-	CGFloat grid = fg*R;
+	
+	CGFloat grid = fg*R; // fg는 변수인게 좋을것 같다. 구멍난거 메꾸기...
 	
 	//	for x=0 to imageWidth stepsize grid do
 	for(int h = 0 ; h < iplCanvas->height ; h+=grid) {

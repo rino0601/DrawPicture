@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <opencv2/opencv.hpp>
+#import <sqlite3.h>
 
 @interface DataHertzmann : NSObject
 
@@ -56,6 +57,7 @@ enum UPDATE_TERM {
 
 - (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSArray *)rad;
 - (UIImage *)image;
+- (void)calcLaplace;
 - (void)calcSobel;
 - (void)calcLayer;
 - (void)popStroke;

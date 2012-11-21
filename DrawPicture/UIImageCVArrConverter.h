@@ -19,7 +19,7 @@
 + (UIImage *)scaleAndRotateImageFrontCamera:(UIImage *)image;
 + (UIImage *)scaleAndRotateImageBackCamera:(UIImage *)image;
 + (IplImage *)CreateIplImageFromUIImage:(UIImage *)image;
-+ (UIImage *)UIImageFromIplImage:(IplImage *)image;
++ (UIImage *)UIImageFromIplImage:(IplImage *)image; // didn't work
 
 @end
 

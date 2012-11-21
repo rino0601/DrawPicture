@@ -10,6 +10,7 @@
 
 #import "BrushViewController.h"
 #import "AboutMeViewController.h"
+#import "DrawingRullViewController.h"
 
 @implementation PreferenceViewController
 
@@ -30,7 +31,7 @@
     // Do any additional setup after loading the view from its nib.
 	[[self navigationItem] setTitle:@"Preferences"];
 	sect1User = [NSArray arrayWithObjects:@"Quick Setting", nil];
-	sect2Manual = [NSArray arrayWithObjects:@"Color Jitter",@"Brush size", nil];
+	sect2Manual = [NSArray arrayWithObjects:@"Color Jitter",@"Brush size",@"Drawing rull", nil];
 	sect3About = [NSArray arrayWithObjects:@"copyright",@"about me", nil];
 }
 
@@ -55,13 +56,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return 1;
+			return [sect1User count];
 			break;
 		case 1:
-			return 2;
+			return [sect2Manual count];
 			break;
 		case 2:
-			return 2;
+			return [sect3About count];
 		default:
 			return 0;
 			break;
@@ -146,8 +147,17 @@
 		[[self navigationController] pushViewController:viewController animated:YES];
 
 		return ;
-	}
-	else if (indexPath.section==2 && indexPath.row == 1) {
+	} else if(indexPath.section==1 && indexPath.row == 2) {
+		DrawingRullViewController *viewController;
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+			viewController = [[DrawingRullViewController alloc] initWithNibName:@"DrawingRullViewController_iPhone" bundle:nil];
+		} else {
+			viewController = [[DrawingRullViewController alloc] initWithNibName:@"DrawingRullViewController_iPad" bundle:nil];
+		}
+		[[self navigationController] pushViewController:viewController animated:YES];
+		
+		return ;
+	} else if (indexPath.section==2 && indexPath.row == 1) {
 		AboutMeViewController *viewController;
 		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 			viewController = [[AboutMeViewController alloc] initWithNibName:@"AboutMeViewController_iPhone" bundle:nil];
