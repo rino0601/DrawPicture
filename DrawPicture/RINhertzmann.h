@@ -36,10 +36,9 @@ enum UPDATE_TERM {
 	NSMutableArray *dot_Que;
 	CGPoint theDot;
 	
-	IplImage *dX, *dY;
+	CvMat *dX, *dY;
 	IplImage *iplCanvas;
 	IplImage *iplRefImg;
-	IplImage *src;
 	
 	//from CIHCavas
 	CGContextRef ctx;
@@ -57,11 +56,12 @@ enum UPDATE_TERM {
 
 - (id)initWithFrame:(CGRect)frame Image:(UIImage *)image Radixes:(NSArray *)rad;
 - (UIImage *)image;
-- (void)calcLaplace;
 - (void)calcSobel;
 - (void)calcLayer;
 - (void)popStroke;
 - (void)popAndDrawPoint;
+
+- (void)test;
 
 
 @end

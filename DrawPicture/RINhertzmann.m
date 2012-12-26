@@ -10,11 +10,12 @@
 #import "UIImageCVArrConverter.h"
 #import "RINAppDelegate.h"
 
-#define fg 					1
-#define T 					50
+#define fg 					1.2
+#define T 					100
 #define MAX_STROKE_LENGTH	5
 #define MIN_STROKE_LENGTH	3
-#define CURVATURE_FILTER	0.95
+#define CURVATURE_FILTER	0.1
+
 #define BEZIER_INTERPOLATION_COEFFICIENT ((CGFloat)0.7)
 #define POINTSTORAGE_CAPACITY ((NSUInteger)1000)
 
@@ -82,14 +83,14 @@ static void interpolateBezierPathAtNode(CGContextRef ctx, CGPoint *points, NSUIn
 		*pointCount=0;
 	}
 }
-IplImage *RIN_sobel_edge(IplImage *src_image, int mode, int dix) {
-	int mask_height, mask_width, mask_vector;
+CvMat *MAT_sobel_edge(IplImage *src_image, int mode) {
+	int mask_height, mask_width;
 	double vertical_var, horizontal_var;
 	
 	int height = src_image->height;
 	int width = src_image->width;
-	mask_vector = dix>0 ? 1 : -1;
-	IplImage *dst_image = cvCloneImage(src_image);
+	
+	CvMat *returnMat = cvCreateMat(height, width, CV_32SC1);
 	
 	mask_height=mask_width=3;
 	int vertical_mask[3][3]={{-1,0,1},{-2,0,2},{-1,0,1}};
@@ -103,26 +104,24 @@ IplImage *RIN_sobel_edge(IplImage *src_image, int mode, int dix) {
 			for(int m=0; m<mask_height; m++){
 				for(int n=0; n<mask_width;n++){
 					CvScalar channel = cvGet2D(src_image, i+m, j+n);
-					vertical_var +=((channel.val[0]+channel.val[1]+channel.val[2])/3.0)*mask_vector*vertical_mask[m][n];
-					horizontal_var +=((channel.val[0]+channel.val[1]+channel.val[2])/3.0)*mask_vector*horizontal_mask[m][n];
+					vertical_var +=((channel.val[0]+channel.val[1]+channel.val[2])/3.0)*vertical_mask[m][n];
+					horizontal_var +=((channel.val[0]+channel.val[1]+channel.val[2])/3.0)*horizontal_mask[m][n];
 				}
 			}
-			//fabs 생략
-			//근데 음수 없다.... 왜?????
-			CvScalar value;
-			value.val[3]=255.0;
+			int value;
 			switch (mode) {
-				case 0:	value.val[2]=value.val[1]=value.val[0]=vertical_var;	break;
-				case 1:	value.val[2]=value.val[1]=value.val[0]=horizontal_var;	break;
+				case 0:	value=vertical_var;	break;
+				case 1:	value=horizontal_var;	break;
 				default:
 					NSLog(@"invalid mode");
 					return NULL;
 			}
-			cvSet2D(dst_image, i+(mask_height-1)/2, j+(mask_width-1)/2, value);
+			returnMat->data.i[returnMat->width*(i+(mask_height-1)/2) + (j+(mask_width-1)/2) ]=(int)value;
 		}
 	}
-	return dst_image;
+	return returnMat;
 }
+
 UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	/*CGImageRef imgRef = CGBitmapContextCreateImage(context);
 	 UIImage* img = [UIImage imageWithCGImage:imgRef];
@@ -138,7 +137,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-		src=[UIImageCVArrConverter CreateIplImageFromUIImage:image];
+		iplRefImg=[UIImageCVArrConverter CreateIplImageFromUIImage:image];
 		radixes=rad;
 		resultUIImage=nil;
 		
@@ -147,7 +146,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		wLine=[(NSNumber *)[radixes objectAtIndex:0] floatValue];
 		
 		CGColorSpaceRef cs=CGColorSpaceCreateDeviceRGB();
-		ctx=CGBitmapContextCreate(NULL, src->width, src->height, 8, 4*src->width, cs, kCGImageAlphaPremultipliedLast);//kCGImageAlphaPremultipliedFirst
+		ctx=CGBitmapContextCreate(NULL, iplRefImg->width, iplRefImg->height, 8, 4*iplRefImg->width, cs, kCGImageAlphaPremultipliedLast);//kCGImageAlphaPremultipliedFirst
 		CGColorSpaceRelease(cs);
 		CGContextSetLineWidth(ctx, wLine);
 		CGContextSetLineCap(ctx, kCGLineCapRound);
@@ -155,7 +154,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		
 		CGFloat components[] = {1.0, 1.0, 1.0, 1.0};
 		CGContextSetFillColorWithColor(ctx, CGColorCreate(cs, components));
-		CGContextFillRect(ctx, CGRectMake(0, 0, src->width, src->height));
+		CGContextFillRect(ctx, CGRectMake(0, 0, iplRefImg->width, iplRefImg->height));
 		
 		points=(CGPoint *)malloc(sizeof(CGPoint)*(alloced=POINTSTORAGE_CAPACITY));
 		if(points==NULL)
@@ -196,38 +195,6 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 }
 #pragma mark -
 #pragma mark interface
-- (void)calcLaplace {
-	callNEXT=NO;
-	
-	// Initialization code
-	C_strok = [NSMutableArray array];
-	S_strok = [NSMutableArray array];
-	dot_Que = [NSMutableArray array];
-	
-	IplImage *x, *y;
-	x = cvCloneImage(src);
-	y = cvCloneImage(src);
-	cvLaplace(src, x);
-	cvLaplace(src, y);
-	dX = x; dY = y;
-	
-	
-	if(mode==EACH_DRAWING){
-		enableMdfyNEXT = NO;
-		while([radixes count]!=0){
-			[self calcLayer];
-		}
-		
-		enableMdfyNEXT = YES;
-		
-		NEXT=FINALSTAT;
-		callNEXT=YES & enableMdfyNEXT;
-		return ;
-	}
-	
-	NEXT = CALCLAYER;
-	callNEXT=YES & enableMdfyNEXT;
-}
 
 - (void)calcSobel {
 	callNEXT=NO;
@@ -237,10 +204,8 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	S_strok = [NSMutableArray array];
 	dot_Que = [NSMutableArray array];
 	
-	IplImage *x1, *x2, *y1, *y2;
-	x1=RIN_sobel_edge(src, 0, 1);	x2=RIN_sobel_edge(src, 0, -1);	y1=RIN_sobel_edge(src, 1, 1);	y2=RIN_sobel_edge(src, 1, -1);
-	dX = cvCloneImage(src);	dY = cvCloneImage(src);
-	cvAdd(x1, x2, dX);	cvAdd(y1, y2, dY); // 이거 필요 없을지도.
+	dX=MAT_sobel_edge(iplRefImg, 0);
+	dY=MAT_sobel_edge(iplRefImg, 1);
 	
 	if(mode==EACH_DRAWING){
 		enableMdfyNEXT = NO;
@@ -251,6 +216,12 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 		enableMdfyNEXT = YES;
 		
 		NEXT=FINALSTAT;
+		//release opencv
+		cvReleaseMat(&dX);
+		cvReleaseMat(&dY);
+		cvReleaseImage(&(iplRefImg));
+		cvReleaseImage(&iplCanvas);
+		
 		callNEXT=YES & enableMdfyNEXT;
 		return ;
 	}
@@ -258,16 +229,26 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	NEXT = CALCLAYER;
 	callNEXT=YES & enableMdfyNEXT;
 }
+
+- (void)test {}
+
 - (void)calcLayer {
 	callNEXT=NO;
 	if([radixes count]==0){
 		NEXT=FINALSTAT;
+		
+		//release opencv
+		cvReleaseMat(&dX);
+		cvReleaseMat(&dY);
+		cvReleaseImage(&(iplRefImg));
+		cvReleaseImage(&iplCanvas);
+		
 		callNEXT=YES & enableMdfyNEXT;
 		return ;
 	}
 	CGFloat R = [[radixes objectAtIndex:0] floatValue];
 	[radixes removeObjectAtIndex:0];
-	[self makeStrokeRef:src radix:R]; // 여기서 시간이 좀 걸림.
+	[self makeStrokeRefRadix:R]; // 여기서 시간이 좀 걸림.
 	[self changeWidth:R]; // 굵기는 Layer에 따라 바뀌는거니 여기서 할당.
 	
 	if(mode==EACH_LAYER || mode == EACH_DRAWING) {
@@ -287,7 +268,6 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	callNEXT=YES & enableMdfyNEXT;
 }
 - (void)popStroke {
-	static int i = 0;
 	callNEXT=NO;
 	if([S_strok count]==0){
 		NEXT = CALCLAYER;
@@ -380,12 +360,13 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 	CGContextDrawImage(UIGraphicsGetCurrentContext(), [self bounds], i);
 	CGImageRelease(i);
 }
-- (void)makeStrokeRef:(IplImage *)referenceImage radix:(CGFloat)R{
+- (void)makeStrokeRefRadix:(CGFloat)R{
 	//procedure paintLayer(canvas,referenceImage, R) {
 	//	S := a new set of strokes, initially empty
+	if(iplCanvas)
+		cvReleaseImage(&iplCanvas);
 	iplCanvas = [UIImageCVArrConverter CreateIplImageFromUIImage:[self image]];  // 고치고 싶다.
 	//	iplRefImg = [UIImageCVArrConverter CreateIplImageFromUIImage:referenceImage];
-	iplRefImg = referenceImage;
 	// 두 점의 차이는, 직접 구하기로 했음. 이 부분에서 연산량이 2배가 되지만, 메모리가 모자라서 어쩔 수 없다.
 	
 	if([S_strok count]!=0 && [C_strok count]!=0) NSLog(@"doh!");
@@ -408,7 +389,7 @@ UIImage* UIGraphicsGetImageFromImageContext (CGContextRef context){
 			int areaError = [self getAreaError:iplCanvas x:w y:h grid:grid]/(grid*grid);// x,y as a start point
 			
 			//			if (areaError > T) then
-			if (areaError > T) {
+			if (areaError > T) { //검은 점을 없애기 위해 T를 작게 잡도록 했는데, 이거 때문에 속도가 느려도 너무 느림;
 				// find the largest error point
 				//				(x1,y1) := arg max i, j ∈M Di,j
 				//				s :=makeStroke(R,x1,y1,referenceImage)

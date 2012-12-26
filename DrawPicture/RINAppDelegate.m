@@ -26,10 +26,7 @@
 	
 	[[UIApplication sharedApplication] setStatusBarHidden:YES];
     [self.window makeKeyAndVisible];
-
-	
-	
-
+		
 	NSFileManager *fm=[NSFileManager defaultManager];
 	NSArray *docuDir;
 	docuDir= NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

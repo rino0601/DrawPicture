@@ -103,19 +103,7 @@
         [alert show];
 		return ;
 	}
-	
-//	/// 라플라스 테스트.
-//	IplImage *src = [UIImageCVArrConverter CreateIplImageFromUIImage:[imageView image]];
-//	IplImage *dst = cvCloneImage(src);
-//	cvLaplace(src, dst);
-//	cv::Mat cvt(dst);
-//	[imageView setImage:[UIImageCVArrConverter UIImageFromCVMat:cvt]];
-//	return ;
-	
-	
-	
-	
-	
+
 	// paint the canvas
 	NSMutableArray *Radixes = [NSMutableArray array];
 	RINAppDelegate* delegate=(RINAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -163,7 +151,7 @@
 	OnDrawing=YES;
 	
 	[iCanvas calcSobel];
-//	[iCanvas calcLaplace];
+//	[iCanvas test];
 	framectrl = [NSTimer scheduledTimerWithTimeInterval:0.0f target:self selector:@selector(process) userInfo:nil repeats:YES];
 	
 	[notice dismissWithClickedButtonIndex:0 animated:NO];
